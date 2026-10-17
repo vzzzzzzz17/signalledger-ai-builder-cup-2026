@@ -62,7 +62,9 @@ npm install
 GOOGLE_CLOUD_PROJECT=your-project-id npm start
 ```
 
-Without Google Cloud credentials, the frontend remains fully usable and uses synthetic offline context. With Application Default Credentials on Cloud Run, pasted posts are analyzed by Gemini.
+Without Google Cloud credentials, the frontend remains fully usable and uses synthetic offline context. When `ENABLE_LIVE_AI=true` and Application Default Credentials are available on Cloud Run, pasted posts are analyzed by Gemini.
+
+For a zero-model-cost demo deployment, set `ENABLE_LIVE_AI=false` (the default). The Cloud Run service then returns deterministic offline context and never calls Vertex AI. Set it to `true` only when a billing/credit budget has been explicitly approved.
 
 ## Firebase Deployment
 
@@ -83,7 +85,10 @@ gcloud run deploy signalledger-api \
   --source server \
   --region us-central1 \
   --allow-unauthenticated \
-  --set-env-vars GOOGLE_CLOUD_PROJECT=your-project-id
+  --min 0 \
+  --max 1 \
+  --cpu-throttling \
+  --set-env-vars GOOGLE_CLOUD_PROJECT=your-project-id,ENABLE_LIVE_AI=false
 ```
 
 ## Repository Structure

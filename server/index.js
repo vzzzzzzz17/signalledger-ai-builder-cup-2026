@@ -5,6 +5,7 @@ const port = Number(process.env.PORT || 8080);
 const projectId = process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT;
 const location = process.env.VERTEX_LOCATION || "us-central1";
 const model = process.env.VERTEX_MODEL || "gemini-2.5-flash";
+const liveAiEnabled = process.env.ENABLE_LIVE_AI === "true";
 
 const headers = {
   "Access-Control-Allow-Origin": process.env.ALLOWED_ORIGIN || "*",
@@ -60,8 +61,24 @@ async function analyzeWithVertex(text) {
   return JSON.parse(output.replace(/^```json\s*|\s*```$/g, ""));
 }
 
-async function analyze(text) {
-  return analyzeWithVertex(text);
+function offlineAnalysis(text) {
+  const upper = text.toUpperCase();
+  const highPressure = /起飞|爆|稳赚|必|别错过|do not miss|fly|no-brainer/i.test(text);
+  const hasRisk = /止损|stop|risk|invalidation|风险/i.test(text);
+  const asset = upper.includes("BTC") ? "BTC" : upper.includes("TSLA") ? "TSLA" : "Unknown";
+  return {
+    asset,
+    market: asset === "BTC" ? "Crypto" : "US Stock",
+    direction: /跌|short|空/i.test(text) ? "Bearish" : "Bullish",
+    action: highPressure ? "High-pressure call" : "Unclear",
+    horizon: "Unknown",
+    riskScore: hasRisk ? 45 : 8,
+    promotionalPressure: highPressure ? 90 : 48,
+    evidenceQuality: "Not independently verified",
+    stopLoss: /止损|stop/i.test(text) ? "Mentioned" : "None",
+    summary: "Offline demo context. Live Gemini analysis is disabled to keep this deployment within free usage.",
+    flags: [highPressure ? "Promotional pressure" : "Needs evidence review", hasRisk ? "Risk language detected" : "No clear risk condition"],
+  };
 }
 
 const server = http.createServer(async (req, res) => {
@@ -74,7 +91,8 @@ const server = http.createServer(async (req, res) => {
     const text = String(body.text || "").trim();
     if (!text) return send(res, 400, { error: "text is required" });
     if (text.length > 8_000) return send(res, 413, { error: "text is too long" });
-    return send(res, 200, { ok: true, analysis: await analyze(text), model });
+    const analysis = liveAiEnabled ? await analyzeWithVertex(text) : offlineAnalysis(text);
+    return send(res, 200, { ok: true, live: liveAiEnabled, analysis, model: liveAiEnabled ? model : "offline-context" });
   } catch (error) {
     console.error(error);
     return send(res, 502, { ok: false, error: "AI analysis unavailable" });

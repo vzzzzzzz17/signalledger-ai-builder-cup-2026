@@ -862,6 +862,7 @@ async function analyzeManual() {
   status.textContent = "";
 
   let analysis = null;
+  let liveAnalysis = false;
   try {
     const response = await fetch("/api/analyze", {
       method: "POST",
@@ -871,6 +872,7 @@ async function analyzeManual() {
     if (response.ok) {
       const payload = await response.json();
       analysis = payload.analysis || null;
+      liveAnalysis = payload.live === true;
     }
   } catch {
     analysis = null;
@@ -905,7 +907,7 @@ async function analyzeManual() {
   };
   calls = [manualCall, ...calls];
   selectedId = manualCall.id;
-  status.textContent = analysis ? t("analysisLive") : t("analysisFallback");
+  status.textContent = analysis && liveAnalysis ? t("analysisLive") : t("analysisFallback");
   button.disabled = false;
   button.textContent = t("analyzeManual");
   renderAll();
