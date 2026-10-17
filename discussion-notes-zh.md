@@ -1,8 +1,8 @@
-# CallLedger 中文讨论稿
+# SignalLedger 中文讨论稿
 
 ## 核心定位
 
-CallLedger 不是 AI 炒股工具，也不是 KOL 排行榜。
+SignalLedger 不是 AI 炒股工具，也不是 KOL 排行榜。
 
 它是一个社交交易责任层：
 
@@ -41,7 +41,7 @@ KOL 说自己赚了，不代表粉丝也赚了。
 5. KOL 晒出最高点收益。
 6. 粉丝实际经历大幅回撤甚至亏损。
 
-CallLedger 要展示：
+SignalLedger 要展示：
 
 - KOL 可见结果。
 - 立即跟单结果。
@@ -178,7 +178,7 @@ CryptoWhale 最大问题是粉丝跟单偏差大。
 
 结尾：
 
-CallLedger does not predict markets. It makes market opinions accountable.
+SignalLedger does not predict markets. It gives market opinions professional context.
 
 ## 已拍板的方向
 

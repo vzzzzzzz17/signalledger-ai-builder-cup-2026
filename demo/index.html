@@ -3,16 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CallLedger Demo</title>
+    <title>SignalLedger Demo</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="app-shell">
       <aside class="sidebar">
         <div class="brand">
-          <div class="brand-mark">CL</div>
+          <div class="brand-mark">SL</div>
           <div>
-            <h1>CallLedger</h1>
+            <h1>SignalLedger</h1>
             <p data-i18n="brandSub">Community intelligence layer</p>
           </div>
         </div>
@@ -40,7 +40,7 @@
           <div class="topbar-actions">
             <button class="secondary-btn" id="langToggle">中文</button>
             <button class="secondary-btn" id="resetDemo" data-i18n="reset">Reset</button>
-            <button class="primary-btn" id="loadDataset" data-i18n="loadDataset">Load 15 sample calls</button>
+            <button class="primary-btn" id="loadDataset" data-i18n="loadDataset">Open community feed</button>
           </div>
         </header>
 
@@ -48,10 +48,10 @@
           <div class="audit-summary">
             <div>
               <p class="eyebrow" data-i18n="problemEyebrow">Community Layer</p>
-              <h3 data-i18n="heroTitle">Users browse the feed. CallLedger adds the missing professional context.</h3>
+              <h3 data-i18n="heroTitle">Users browse the feed. SignalLedger adds the missing professional context.</h3>
               <p data-i18n="heroBody">
-                CallLedger converts X posts, broker-community screenshots, crypto calls, and chat snippets
-                into structured receipts with risk disclosure, hype analysis, and follower outcome tracking.
+                SignalLedger converts X posts, broker-community screenshots, crypto calls, and chat snippets
+                into structured context cards with risk disclosure, evidence quality, and follower outcome tracking.
               </p>
             </div>
             <div class="hero-stats">
@@ -61,7 +61,7 @@
               </div>
               <div>
                 <span id="statReceipts">0</span>
-                <label data-i18n="receiptsCreated">Receipts created</label>
+                <label data-i18n="receiptsCreated">Context cards</label>
               </div>
               <div>
                 <span id="statFlagged">0</span>
@@ -72,7 +72,7 @@
               <div><strong>1</strong><span data-i18n="pipeIngest">Browse community posts</span></div>
               <div><strong>2</strong><span data-i18n="pipeExtract">Open professional context</span></div>
               <div><strong>3</strong><span data-i18n="pipeTrack">Compare KOL narrative and follower path</span></div>
-              <div><strong>4</strong><span data-i18n="pipeReview">Save receipt for future review</span></div>
+              <div><strong>4</strong><span data-i18n="pipeReview">Keep a versioned record</span></div>
             </div>
           </div>
 
@@ -104,6 +104,7 @@
               </div>
               <textarea id="manualPost" placeholder="Paste a market call here...">TSLA 要起飞了，聪明钱已经进场，别等错过才后悔。</textarea>
               <button class="secondary-btn full" id="analyzeManual" data-i18n="analyzeManual">Analyze pasted post</button>
+              <p class="analysis-status" id="analysisStatus" aria-live="polite"></p>
             </section>
 
             <section class="panel">
@@ -114,7 +115,7 @@
                 </div>
               </div>
               <div id="extractionEmpty" class="empty-state">
-                <span data-i18n="emptyState">Load the sample dataset or analyze a pasted post to generate receipts.</span>
+                <span data-i18n="emptyState">Open the community feed or analyze a pasted post to add context.</span>
               </div>
               <div id="extractionList" class="post-list"></div>
             </section>
@@ -126,19 +127,19 @@
             <section class="panel">
               <div class="panel-header">
                 <div>
-                  <p class="eyebrow" data-i18n="originalClaim">Original Claim</p>
-                  <h3 id="receiptTitle">No receipt selected</h3>
+                  <p class="eyebrow" data-i18n="originalClaim">Original Post</p>
+                  <h3 id="receiptTitle">No context selected</h3>
                 </div>
                 <span class="source-pill" id="receiptSource">Source</span>
               </div>
-              <blockquote id="receiptText">Load sample data to inspect a call receipt.</blockquote>
+              <blockquote id="receiptText">Open the community feed to inspect a context card.</blockquote>
               <div class="receipt-meta" id="receiptMeta"></div>
             </section>
 
             <section class="receipt-card">
               <div class="receipt-top">
-                <span data-i18n="receiptLabel">CONTEXT RECEIPT</span>
-                <strong id="receiptId">CL-0000</strong>
+                <span data-i18n="receiptLabel">SIGNAL CONTEXT</span>
+                <strong id="receiptId">SL-0000</strong>
               </div>
               <div class="receipt-row">
                 <label data-i18n="asset">Asset</label>
@@ -165,8 +166,8 @@
                 <span id="receiptHash">sha256...</span>
               </div>
               <div class="receipt-status">
-                <label data-i18n="auditStatus">Audit status</label>
-                <span data-i18n="auditStatusValue">Versioned · appealable · non-advisory</span>
+                <label data-i18n="auditStatus">Record status</label>
+                <span data-i18n="auditStatusValue">Versioned · author can add context · non-advisory</span>
               </div>
             </section>
           </div>
@@ -248,11 +249,11 @@
             <p class="eyebrow" data-i18n="fairnessFlow">Fairness Flow</p>
             <h3 id="appealTitle">KOL appeal / add context</h3>
           </div>
-          <button class="icon-btn" id="closeAppeal" aria-label="Close">x</button>
+          <button class="icon-btn" id="closeAppeal" aria-label="Close">×</button>
         </div>
         <p>
           <span data-i18n="appealBody">The author can add missing context such as original entry, stop-loss logic, risk notes, or correction.
-          CallLedger stores the appeal as a new version instead of silently rewriting history.</span>
+          SignalLedger stores the addition as a new version instead of silently rewriting history.</span>
         </p>
         <textarea id="appealText">补充说明：原帖是观察观点，不是要求粉丝立刻追高；实际止损位在前一条帖子中提到。</textarea>
         <div class="modal-actions">

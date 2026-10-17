@@ -1,4 +1,4 @@
-# CallLedger Submission Plan
+# SignalLedger Submission Plan
 
 ## Submission Requirements
 
@@ -8,6 +8,8 @@ Required deliverables:
 2. Demo video under 3 minutes.
 3. Public GitHub repository.
 4. Solution deck.
+
+Initial submission is asynchronous: the requirements call for a working link and a short demo video, not a live presentation. A live demo is relevant only if the project advances to the final round.
 
 Technical requirement:
 
@@ -92,7 +94,7 @@ Suggested structure:
 
 Recommended deck:
 
-1. Title: CallLedger.
+1. Title: SignalLedger.
 2. Problem: social trading lacks professional context and accountability.
 3. Insight: KOL result is not follower result.
 4. Solution: community context layer.
@@ -118,7 +120,7 @@ Strongly recommended:
 6. A short founder/domain credibility statement you are comfortable using.
    Example: "Built from first-hand experience observing how retail investors consume market views in trading communities."
 7. Whether we can mention "broker community" only, or lightly reference "Futubull-like communities" without naming your employer.
-8. Logo preference: keep text-only CallLedger, or create a simple mark.
+8. Logo preference: keep the SignalLedger wordmark with a simple mark.
 
 Avoid providing:
 
@@ -152,7 +154,7 @@ Avoid providing:
 
 ## Competition Story
 
-CallLedger is not an AI stock picker.
+SignalLedger is not an AI stock picker.
 
 It is a professional context layer for social trading communities. Users can still browse market opinions, but every actionable market call can be accompanied by:
 
@@ -166,4 +168,3 @@ It is a professional context layer for social trading communities. Users can sti
 The key insight:
 
 KOL performance is not follower performance.
-

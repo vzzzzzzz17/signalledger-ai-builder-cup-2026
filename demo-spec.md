@@ -1,4 +1,4 @@
-# CallLedger Demo Spec
+# SignalLedger Demo Spec
 
 ## 1. Demo Goal
 
@@ -12,7 +12,7 @@ The demo should not feel like an AI stock picker. It should feel like an account
 
 Product:
 
-CallLedger
+SignalLedger
 
 Tagline:
 
@@ -651,7 +651,7 @@ Cards:
 
 Demo button:
 
-"Load 15 sample calls"
+"Open community feed"
 
 ### 8.2 Extraction Workbench
 
@@ -726,9 +726,9 @@ For platform view:
 
 ### 0:20-0:45 Load Data
 
-"CallLedger starts by turning social trading content into structured receipts. Here I load 15 sample calls from broker-community style posts, X-style posts, crypto posts, and chat messages."
+"SignalLedger starts by turning social trading content into structured context cards. Here I load 15 sample calls from broker-community style posts, X-style posts, crypto posts, and chat messages."
 
-Show upload screen and click "Load 15 sample calls."
+Open the community screen and click "Open community feed."
 
 ### 0:45-1:20 Multimodal Extraction
 
@@ -762,13 +762,13 @@ Say:
 
 ### 2:25-2:50 KOL Dashboard
 
-"Across all calls, CallLedger builds a reputation profile. ChartSage is not always right, but has clear risk controls. HypeMax has high hype and poor disclosure. CryptoWhale has a large follower outcome gap."
+"Across all calls, SignalLedger builds an author profile. ChartSage is not always right, but has clear risk controls. HypeMax has high hype and poor disclosure. CryptoWhale has a large follower outcome gap."
 
 Show grades.
 
 ### 2:50-3:00 Closing
 
-"CallLedger does not predict markets. It makes market opinions accountable. Every call gets a receipt. Every receipt gets tracked."
+"SignalLedger does not predict markets. It gives market opinions professional context. Every call gets a versioned record. Every record can be tracked."
 
 ## 10. Visual Tone
 
@@ -842,4 +842,3 @@ For the deck and implementation:
 3. Should crypto examples include meme coins, or keep to BTC/ETH/SOL/DOGE?
 4. Should the KOL grade be visible to users, or should users see sub-scores without a single grade?
 5. Should the demo include a "KOL appeal" flow to make the system feel fair?
-

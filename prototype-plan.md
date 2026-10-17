@@ -1,8 +1,8 @@
-# CallLedger Prototype Plan
+# SignalLedger Prototype Plan
 
 ## 1. One-Line Pitch
 
-CallLedger is a reputation and accountability layer for social trading, turning public market calls from broker communities, X, crypto communities, and chat groups into traceable receipts with outcome tracking and risk-disclosure scoring.
+SignalLedger is a professional context layer for social trading, turning public market calls from broker communities, X, crypto communities, and chat groups into versioned context cards with outcome tracking and risk-disclosure scoring.
 
 Chinese pitch:
 
@@ -14,7 +14,7 @@ Social trading does not lack opinions. It lacks accountability.
 
 KOLs and strategy influencers can publish bullish or bearish calls, delete losing calls, selectively show profitable screenshots, or rewrite the narrative after price moves. Retail followers often act later, with worse entry prices and less risk control, but the platform only preserves scattered posts, screenshots, and comments.
 
-CallLedger does not predict the market. It records and audits the information environment around a trade call:
+SignalLedger does not predict the market. It records the information environment around a trade call:
 
 - Who made the call.
 - What asset was mentioned.
@@ -238,7 +238,7 @@ Elements:
 - Upload screenshots.
 - Paste X, broker-community, or crypto-community post.
 - Import sample dataset button.
-- Clear disclaimer: "CallLedger does not provide trading advice."
+- Clear disclaimer: "SignalLedger does not provide trading advice."
 
 ### Screen 2: Extraction Review
 
@@ -335,7 +335,7 @@ Show KOL accountability grade and platform moderation queue.
 
 Closing line:
 
-"CallLedger does not predict markets. It makes social trading accountable."
+"SignalLedger does not predict markets. It gives social trading professional context."
 
 ## 11. Data Model
 
@@ -428,11 +428,11 @@ The prototype must be clear about boundaries:
 
 Recommended UI disclaimer:
 
-"CallLedger analyzes public trading content for transparency, accountability, and investor education. It does not provide investment advice or predict future returns."
+"SignalLedger analyzes public trading content for transparency, accountability, and investor education. It does not provide investment advice or predict future returns."
 
 ## 14. Moat Narrative
 
-CallLedger's moat is not the AI model. It is the accountability graph built over time.
+SignalLedger's moat is not the AI model. It is the accountability graph built over time.
 
 ### Call Graph
 
@@ -448,7 +448,7 @@ Which authors consistently disclose risk, rewrite narratives, delete losing call
 
 ### Cross-Platform Memory
 
-Single platforms see their own content. Users see fragmented screenshots. CallLedger can become the independent memory layer across broker communities, X, chat groups, and trading newsletters.
+Single platforms see their own content. Users see fragmented screenshots. SignalLedger can become the independent memory layer across broker communities, X, chat groups, and trading newsletters.
 
 ## 15. Open Questions For Discussion
 

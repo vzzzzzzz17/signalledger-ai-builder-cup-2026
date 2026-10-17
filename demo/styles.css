@@ -191,6 +191,11 @@ button {
   border-color: var(--line);
 }
 
+button:disabled {
+  cursor: wait;
+  opacity: 0.64;
+}
+
 .full {
   width: 100%;
 }
@@ -379,6 +384,13 @@ textarea {
 textarea:focus {
   border-color: #98a7be;
   box-shadow: 0 0 0 3px rgba(36, 84, 166, 0.08);
+}
+
+.analysis-status {
+  min-height: 18px;
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .empty-state {

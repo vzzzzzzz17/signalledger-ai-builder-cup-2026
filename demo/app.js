@@ -1,6 +1,6 @@
 const sampleCalls = [
   {
-    id: "CL-1001",
+    id: "SL-1001",
     author: "HypeMax",
     source: "X",
     asset: "TSLA",
@@ -21,7 +21,7 @@ const sampleCalls = [
     flags: ["High hype", "No stop loss", "Follower loss"],
   },
   {
-    id: "CL-1002",
+    id: "SL-1002",
     author: "HypeMax",
     source: "Broker community",
     asset: "NVDA",
@@ -42,7 +42,7 @@ const sampleCalls = [
     flags: ["No stop loss"],
   },
   {
-    id: "CL-1003",
+    id: "SL-1003",
     author: "HypeMax",
     source: "Broker community",
     asset: "PLTR",
@@ -63,7 +63,7 @@ const sampleCalls = [
     flags: ["Chinese hype", "Follower loss", "No risk disclosure"],
   },
   {
-    id: "CL-1004",
+    id: "SL-1004",
     author: "HypeMax",
     source: "Chat group",
     asset: "COIN",
@@ -84,7 +84,7 @@ const sampleCalls = [
     flags: ["High hype", "Follower loss"],
   },
   {
-    id: "CL-1005",
+    id: "SL-1005",
     author: "HypeMax",
     source: "X",
     asset: "MSTR",
@@ -105,7 +105,7 @@ const sampleCalls = [
     flags: ["Leverage risk"],
   },
   {
-    id: "CL-2001",
+    id: "SL-2001",
     author: "ChartSage",
     source: "X",
     asset: "AAPL",
@@ -126,7 +126,7 @@ const sampleCalls = [
     flags: ["Responsible call"],
   },
   {
-    id: "CL-2002",
+    id: "SL-2002",
     author: "ChartSage",
     source: "Broker community",
     asset: "MSFT",
@@ -147,7 +147,7 @@ const sampleCalls = [
     flags: ["No-trade discipline"],
   },
   {
-    id: "CL-2003",
+    id: "SL-2003",
     author: "ChartSage",
     source: "X",
     asset: "AMD",
@@ -168,7 +168,7 @@ const sampleCalls = [
     flags: ["Loss transparency"],
   },
   {
-    id: "CL-2004",
+    id: "SL-2004",
     author: "ChartSage",
     source: "Broker community",
     asset: "JPM",
@@ -189,7 +189,7 @@ const sampleCalls = [
     flags: ["Responsible call"],
   },
   {
-    id: "CL-2005",
+    id: "SL-2005",
     author: "ChartSage",
     source: "X",
     asset: "SPY",
@@ -210,7 +210,7 @@ const sampleCalls = [
     flags: ["Risk reduction"],
   },
   {
-    id: "CL-3001",
+    id: "SL-3001",
     author: "CryptoWhale",
     source: "Crypto community",
     asset: "BTC",
@@ -231,7 +231,7 @@ const sampleCalls = [
     flags: ["Follower slippage", "High hype"],
   },
   {
-    id: "CL-3002",
+    id: "SL-3002",
     author: "CryptoWhale",
     source: "X",
     asset: "ETH",
@@ -252,7 +252,7 @@ const sampleCalls = [
     flags: ["Pressure language"],
   },
   {
-    id: "CL-3003",
+    id: "SL-3003",
     author: "CryptoWhale",
     source: "Crypto community",
     asset: "SOL",
@@ -273,7 +273,7 @@ const sampleCalls = [
     flags: ["Severe follower slippage", "No stop loss"],
   },
   {
-    id: "CL-3004",
+    id: "SL-3004",
     author: "CryptoWhale",
     source: "X",
     asset: "DOGE",
@@ -294,7 +294,7 @@ const sampleCalls = [
     flags: ["Volatile asset"],
   },
   {
-    id: "CL-3005",
+    id: "SL-3005",
     author: "CryptoWhale",
     source: "Chat group",
     asset: "PEPE",
@@ -349,18 +349,18 @@ const i18n = {
     topEyebrow: "BFSI Prototype",
     topTitle: "A trading community with professional context beside every market call.",
     reset: "Reset",
-    loadDataset: "Load 15 sample calls",
+    loadDataset: "Open community feed",
     problemEyebrow: "Community Layer",
-    heroTitle: "Users browse the feed. CallLedger adds the missing professional context.",
+    heroTitle: "Users browse the feed. SignalLedger adds the missing professional context.",
     heroBody:
-      "CallLedger keeps the community experience, but adds structured context: evidence quality, risk disclosure, author behavior, and realistic follower outcomes.",
+      "SignalLedger keeps the community experience, but adds structured context: evidence quality, risk disclosure, author behavior, and realistic follower outcomes.",
     callsLoaded: "Calls loaded",
-    receiptsCreated: "Receipts created",
+    receiptsCreated: "Context cards",
     highRiskFlags: "High-risk flags",
     pipeIngest: "Browse community posts",
     pipeExtract: "Open professional context",
     pipeTrack: "Compare KOL narrative and follower path",
-    pipeReview: "Save receipt for future review",
+    pipeReview: "Keep a versioned record",
     inputEyebrow: "Community Feed",
     inputTitle: "Browse market calls across stocks and crypto",
     sourcePublic: "Market chatter",
@@ -368,19 +368,22 @@ const i18n = {
     sourceCrypto: "Crypto calls",
     sourceChat: "Needs context",
     analyzeManual: "Analyze pasted post",
+    analyzing: "Analyzing with Gemini…",
+    analysisLive: "Gemini context added.",
+    analysisFallback: "Offline demo context added.",
     extractEyebrow: "Professional Context",
     extractTitle: "What a user should know before following this view",
-    emptyState: "Load the sample dataset or analyze a pasted post to generate receipts.",
-    originalClaim: "Original Claim",
-    receiptLabel: "CONTEXT RECEIPT",
+    emptyState: "Open the community feed or analyze a pasted post to add context.",
+    originalClaim: "Original Post",
+    receiptLabel: "SIGNAL CONTEXT",
     asset: "Asset",
     direction: "Direction",
     callTimePrice: "Call-time price",
     riskDisclosure: "Risk disclosure",
     hypeEvidence: "Hype-to-evidence",
     contentHash: "Content hash",
-    auditStatus: "Audit status",
-    auditStatusValue: "Versioned · appealable · non-advisory",
+    auditStatus: "Record status",
+    auditStatusValue: "Versioned · author can add context · non-advisory",
     aiNotes: "AI Notes",
     aiNotesTitle: "Why this call was scored this way",
     heroFeature: "Impact Analysis",
@@ -394,7 +397,7 @@ const i18n = {
     moderationTitle: "Content requiring additional context",
     fairnessFlow: "Fairness Flow",
     appealBody:
-      "The author can add missing context such as original entry, stop-loss logic, risk notes, or correction. CallLedger stores the appeal as a new version instead of silently rewriting history.",
+      "The author can add missing context such as original entry, stop-loss logic, risk notes, or correction. SignalLedger stores the addition as a new version instead of silently rewriting history.",
     cancel: "Cancel",
     attachContext: "Attach context",
     riskDisclosed: "Risk disclosed",
@@ -415,15 +418,15 @@ const i18n = {
     followerLossCases: "follower-loss cases",
     reviewReceipt: "Review receipt",
     suggestedLabel: "Suggested label: add risk context",
-    attachMessage: "Appeal context attached as version {n}. Original receipt remains unchanged.",
+    attachMessage: "Additional context attached as version {n}. Original record remains unchanged.",
     slippageMessage:
-      "A follower entering after the post may see a {gap} gap versus the KOL's best visible narrative. CallLedger flags this as {level} follower slippage risk.",
+      "A follower entering after the post may see a {gap} gap versus the author's best visible narrative. SignalLedger flags this as {level} follower slippage risk.",
     severe: "severe",
     material: "material",
     moderate: "moderate",
     selectCall: "Select a call",
     noReceipt: "No receipt selected",
-    loadToInspect: "Load sample data to inspect a call receipt.",
+    loadToInspect: "Open the community feed to inspect a context card.",
     loadToCompare: "Load sample data to compare KOL narrative and follower reality.",
     langToggle: "中文",
   },
@@ -439,18 +442,18 @@ const i18n = {
     topEyebrow: "金融科技原型",
     topTitle: "一个在每条市场观点旁提供专业上下文的交易社区。",
     reset: "重置",
-    loadDataset: "加载 15 条样例",
+    loadDataset: "打开社区信息流",
     problemEyebrow: "社区层",
-    heroTitle: "用户进来逛社区，CallLedger 在旁边补上专业上下文。",
+    heroTitle: "用户进来逛社区，SignalLedger 在旁边补上专业上下文。",
     heroBody:
-      "CallLedger 保留社区浏览体验，同时补充证据质量、风险披露、作者历史行为和普通粉丝可能经历的真实路径。",
+      "SignalLedger 保留社区浏览体验，同时补充证据质量、风险披露、作者历史行为和普通粉丝可能经历的真实路径。",
     callsLoaded: "已加载喊单",
-    receiptsCreated: "已生成收据",
+    receiptsCreated: "上下文卡片",
     highRiskFlags: "高风险标记",
     pipeIngest: "浏览社区内容",
     pipeExtract: "打开专业上下文",
     pipeTrack: "比较 KOL 叙事和粉丝路径",
-    pipeReview: "保存收据用于复盘",
+    pipeReview: "保留版本记录",
     inputEyebrow: "社区信息流",
     inputTitle: "浏览美股和 Crypto 市场观点",
     sourcePublic: "市场讨论",
@@ -458,19 +461,22 @@ const i18n = {
     sourceCrypto: "Crypto 喊单",
     sourceChat: "需要上下文",
     analyzeManual: "分析粘贴内容",
+    analyzing: "正在用 Gemini 分析…",
+    analysisLive: "Gemini 上下文已加入。",
+    analysisFallback: "已加入离线演示上下文。",
     extractEyebrow: "专业上下文",
     extractTitle: "用户跟随这条观点前应该知道什么",
-    emptyState: "加载样例数据或分析粘贴内容后，会生成喊单收据。",
-    originalClaim: "原始观点",
-    receiptLabel: "上下文收据",
+    emptyState: "打开社区信息流或分析粘贴内容，为观点补充上下文。",
+    originalClaim: "原始帖子",
+    receiptLabel: "信号上下文",
     asset: "标的",
     direction: "方向",
     callTimePrice: "喊单时价格",
     riskDisclosure: "风险披露",
     hypeEvidence: "情绪/证据比",
     contentHash: "内容哈希",
-    auditStatus: "审计状态",
-    auditStatusValue: "版本化 · 可申诉 · 非投资建议",
+    auditStatus: "记录状态",
+    auditStatusValue: "版本化 · 作者可补充 · 非投资建议",
     aiNotes: "AI 说明",
     aiNotesTitle: "为什么这条喊单得到这个评分",
     heroFeature: "影响分析",
@@ -483,7 +489,7 @@ const i18n = {
     moderationTitle: "需要补充上下文的内容",
     fairnessFlow: "公平机制",
     appealBody:
-      "作者可以补充原始入场、止损逻辑、风险说明或更正信息。CallLedger 会把补充说明作为新版本保存，而不是静默改写历史。",
+      "作者可以补充原始入场、止损逻辑、风险说明或更正信息。SignalLedger 会把补充说明作为新版本保存，而不是静默改写历史。",
     cancel: "取消",
     attachContext: "附加说明",
     riskDisclosed: "已披露风险",
@@ -504,15 +510,15 @@ const i18n = {
     followerLossCases: "个粉丝亏损案例",
     reviewReceipt: "查看收据",
     suggestedLabel: "建议标签：补充风险上下文",
-    attachMessage: "补充说明已作为第 {n} 个版本附加。原始收据保持不变。",
+    attachMessage: "补充说明已作为第 {n} 个版本附加。原始记录保持不变。",
     slippageMessage:
-      "粉丝在看到帖子后入场，可能比 KOL 最佳可见叙事多承受 {gap} 的差距。CallLedger 将其标记为{level}跟单偏差风险。",
+      "粉丝在看到帖子后入场，可能比作者最佳可见叙事多承受 {gap} 的差距。SignalLedger 将其标记为{level}跟单偏差风险。",
     severe: "严重",
     material: "明显",
     moderate: "中等",
     selectCall: "请选择一条喊单",
     noReceipt: "尚未选择收据",
-    loadToInspect: "加载样例数据后，可查看喊单收据。",
+    loadToInspect: "打开社区信息流后，可查看上下文卡片。",
     loadToCompare: "加载样例数据后，可比较 KOL 叙事和粉丝真实路径。",
     langToggle: "EN",
   },
@@ -542,6 +548,15 @@ function fmtPrice(call) {
   if (call.asset === "PEPE") return `$${call.price.toFixed(6)}`;
   if (call.asset === "DOGE") return `$${call.price.toFixed(2)}`;
   return `$${call.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 function hashFor(call) {
@@ -585,10 +600,10 @@ function renderPostList() {
       (call) => `
         <button class="post-card ${call.id === selectedId ? "active" : ""}" data-call-id="${call.id}">
           <div class="post-top">
-            <span class="post-author">${call.author}</span>
-            <span class="source-pill">${call.source}</span>
+            <span class="post-author">${escapeHtml(call.author)}</span>
+            <span class="source-pill">${escapeHtml(call.source)}</span>
           </div>
-          <p class="post-text">${call.text}</p>
+          <p class="post-text">${escapeHtml(call.text)}</p>
           <div class="post-tags">
             <span class="tag">${call.asset} · ${call.direction}</span>
             ${riskTag(call)}
@@ -792,8 +807,8 @@ function renderModeration() {
       (call) => `
         <div class="mod-item">
           <div>
-            <h4>${call.author} · ${call.asset}</h4>
-            <p>${call.text}</p>
+            <h4>${escapeHtml(call.author)} · ${escapeHtml(call.asset)}</h4>
+            <p>${escapeHtml(call.text)}</p>
             <div class="post-tags" style="margin-top: 10px">
               <span class="tag red">${call.flags[0] || "High risk"}</span>
               <span class="tag amber">${t("suggestedLabel")}</span>
@@ -832,37 +847,67 @@ function showView(view) {
 
 function loadDataset() {
   calls = sampleCalls.map((call) => ({ ...call }));
-  selectedId = "CL-3001";
+  selectedId = "SL-3001";
   renderAll();
   showView("inbox");
 }
 
-function analyzeManual() {
+async function analyzeManual() {
   const text = $("#manualPost").value.trim();
   if (!text) return;
+  const button = $("#analyzeManual");
+  const status = $("#analysisStatus");
+  button.disabled = true;
+  button.textContent = t("analyzing");
+  status.textContent = "";
+
+  let analysis = null;
+  try {
+    const response = await fetch("/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    if (response.ok) {
+      const payload = await response.json();
+      analysis = payload.analysis || null;
+    }
+  } catch {
+    analysis = null;
+  }
+
+  const upper = text.toUpperCase();
+  const fallbackRisk = /止损|risk|invalidation|风险/i.test(text) ? 45 : 8;
+  const fallbackHype = /起飞|爆|稳赚|必|别错过|do not miss|fly/i.test(text) ? 90 : 48;
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, Number(value) || 0));
   const manualCall = {
-    id: `CL-M${String(Date.now()).slice(-4)}`,
-    author: "ManualInput",
-    source: "Pasted text",
-    asset: text.toUpperCase().includes("BTC") ? "BTC" : text.toUpperCase().includes("TSLA") ? "TSLA" : "UNKNOWN",
-    market: text.toUpperCase().includes("BTC") ? "Crypto" : "US Stock",
+    id: `SL-M${String(Date.now()).slice(-4)}`,
+    author: "Community member",
+    source: "Pasted post",
+    asset: analysis?.asset || (upper.includes("BTC") ? "BTC" : upper.includes("TSLA") ? "TSLA" : "UNKNOWN"),
+    market: analysis?.market || (upper.includes("BTC") ? "Crypto" : "US Stock"),
     time: "Demo time",
-    price: text.toUpperCase().includes("BTC") ? 78000 : 250,
-    direction: /跌|short|空/i.test(text) ? "Bearish" : "Bullish",
-    action: /别|do not miss|错过|起飞|fly/i.test(text) ? "High-pressure call" : "Unclear",
-    horizon: "Unclear",
+    price: upper.includes("BTC") ? 78000 : 250,
+    direction: analysis?.direction || (/跌|short|空/i.test(text) ? "Bearish" : "Bullish"),
+    action: analysis?.action || (/别|do not miss|错过|起飞|fly/i.test(text) ? "High-pressure call" : "Unclear"),
+    horizon: analysis?.horizon || "Unclear",
     text,
-    risk: /止损|risk|invalidation|风险/i.test(text) ? 45 : 8,
-    hype: /起飞|爆|稳赚|必|别错过|do not miss|fly/i.test(text) ? 90 : 48,
-    evidence: "Manual AI-style extraction",
-    stopLoss: /止损|stop/i.test(text) ? "Mentioned" : "None",
-    notes: ["Demo extraction from pasted text", "Needs Gemini in production", "Manual correction supported"],
+    risk: clamp(analysis?.riskScore ?? fallbackRisk, 0, 100),
+    hype: clamp(analysis?.promotionalPressure ?? fallbackHype, 0, 100),
+    evidence: analysis?.evidenceQuality || "Manual context extraction",
+    stopLoss: analysis?.stopLoss || (/止损|stop/i.test(text) ? "Mentioned" : "None"),
+    notes: Array.isArray(analysis?.flags) && analysis.flags.length
+      ? analysis.flags
+      : ["Offline demo extraction", "Author context can be added", "Manual correction supported"],
     returns: { one: 1.2, seven: -6.4, thirty: -9.2, maxFav: 4.5, maxAdv: -12.0, follower: -8.8 },
     path: [0, 2.2, 4.5, -1.5, -6.4, -12.0, -10.4, -9.2],
     flags: ["Manual input", "Needs review"],
   };
   calls = [manualCall, ...calls];
   selectedId = manualCall.id;
+  status.textContent = analysis ? t("analysisLive") : t("analysisFallback");
+  button.disabled = false;
+  button.textContent = t("analyzeManual");
   renderAll();
   showView("receipt");
 }
