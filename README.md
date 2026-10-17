@@ -17,6 +17,8 @@ This project is being prepared for Google Cloud AI Builder Cup 2026 under the BF
 
 The current version is a polished clickable prototype with an optional Gemini-powered analysis path:
 
+Live demo: https://signalledger-ai-builder-cup.web.app
+
 ```text
 demo/index.html
 ```
@@ -50,7 +52,7 @@ The prototype uses synthetic public-style content and static market paths. It do
 - Database: Firestore for posts, context receipts, author profiles, and appeal records.
 - Analytics: BigQuery for historical behavior aggregation.
 
-The first submission path uses Firebase Hosting for the frontend and Cloud Run for the `/api/analyze` endpoint. Cloud Run calls Gemini through Vertex AI using its service account, so no model key is exposed in the browser. Firebase rewrites `/api/**` to the Cloud Run service.
+The first submission path uses Firebase Hosting for the frontend and Cloud Run for the `/api/analyze` endpoint. Cloud Run calls Gemini through Vertex AI using its service account, so no model key is exposed in the browser. Firebase rewrites `/api/**` to the Cloud Run service. Firebase Hosting is already deployed; Cloud Run and Vertex AI require billing to be enabled on the Google Cloud project.
 
 ## Local API
 
@@ -71,7 +73,7 @@ After installing the Firebase CLI and logging in once:
 ```bash
 cp .firebaserc.example .firebaserc
 # replace YOUR_GOOGLE_CLOUD_PROJECT_ID in .firebaserc
-firebase deploy --only hosting
+firebase deploy --only hosting --config firebase.static.json
 ```
 
 Deploy the API separately to Cloud Run, then Firebase's rewrite will expose it at `/api/analyze`:
