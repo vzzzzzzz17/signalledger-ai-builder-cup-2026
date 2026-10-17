@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CallLedger Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">CL</div>
+          <div>
+            <h1>CallLedger</h1>
+            <p data-i18n="brandSub">Community intelligence layer</p>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="Demo sections">
+          <button class="nav-item active" data-view="inbox" data-i18n="navInbox">Community</button>
+          <button class="nav-item" data-view="receipt" data-i18n="navReceipt">Context Card</button>
+          <button class="nav-item" data-view="outcome" data-i18n="navOutcome">Follower Impact</button>
+          <button class="nav-item" data-view="dashboard" data-i18n="navDashboard">Author Profile</button>
+          <button class="nav-item" data-view="moderation" data-i18n="navModeration">Review Queue</button>
+        </nav>
+
+        <div class="disclaimer">
+          <strong data-i18n="disclaimerTitle">No trading advice.</strong>
+          <span data-i18n="disclaimerBody">Demo uses synthetic public-style posts and static market paths.</span>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" data-i18n="topEyebrow">BFSI Prototype</p>
+            <h2 data-i18n="topTitle">A trading community with professional context beside every market call.</h2>
+          </div>
+          <div class="topbar-actions">
+            <button class="secondary-btn" id="langToggle">中文</button>
+            <button class="secondary-btn" id="resetDemo" data-i18n="reset">Reset</button>
+            <button class="primary-btn" id="loadDataset" data-i18n="loadDataset">Load 15 sample calls</button>
+          </div>
+        </header>
+
+        <section class="view active" id="view-inbox">
+          <div class="audit-summary">
+            <div>
+              <p class="eyebrow" data-i18n="problemEyebrow">Community Layer</p>
+              <h3 data-i18n="heroTitle">Users browse the feed. CallLedger adds the missing professional context.</h3>
+              <p data-i18n="heroBody">
+                CallLedger converts X posts, broker-community screenshots, crypto calls, and chat snippets
+                into structured receipts with risk disclosure, hype analysis, and follower outcome tracking.
+              </p>
+            </div>
+            <div class="hero-stats">
+              <div>
+                <span id="statCalls">0</span>
+                <label data-i18n="callsLoaded">Calls loaded</label>
+              </div>
+              <div>
+                <span id="statReceipts">0</span>
+                <label data-i18n="receiptsCreated">Receipts created</label>
+              </div>
+              <div>
+                <span id="statFlagged">0</span>
+                <label data-i18n="highRiskFlags">High-risk flags</label>
+              </div>
+            </div>
+            <div class="pipeline">
+              <div><strong>1</strong><span data-i18n="pipeIngest">Browse community posts</span></div>
+              <div><strong>2</strong><span data-i18n="pipeExtract">Open professional context</span></div>
+              <div><strong>3</strong><span data-i18n="pipeTrack">Compare KOL narrative and follower path</span></div>
+              <div><strong>4</strong><span data-i18n="pipeReview">Save receipt for future review</span></div>
+            </div>
+          </div>
+
+          <div class="content-grid two">
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow" data-i18n="inputEyebrow">Community Feed</p>
+                  <h3 data-i18n="inputTitle">Browse market calls across stocks and crypto</h3>
+                </div>
+              </div>
+              <div class="intake-grid">
+                <button class="intake-source active">
+                  <strong>X</strong>
+                  <span data-i18n="sourcePublic">Market chatter</span>
+                </button>
+                <button class="intake-source">
+                  <strong>Broker</strong>
+                  <span data-i18n="sourceBroker">Broker feed</span>
+                </button>
+                <button class="intake-source">
+                  <strong>Crypto</strong>
+                  <span data-i18n="sourceCrypto">Crypto calls</span>
+                </button>
+                <button class="intake-source">
+                  <strong>Watch</strong>
+                  <span data-i18n="sourceChat">Needs context</span>
+                </button>
+              </div>
+              <textarea id="manualPost" placeholder="Paste a market call here...">TSLA 要起飞了，聪明钱已经进场，别等错过才后悔。</textarea>
+              <button class="secondary-btn full" id="analyzeManual" data-i18n="analyzeManual">Analyze pasted post</button>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow" data-i18n="extractEyebrow">Professional Context</p>
+                  <h3 data-i18n="extractTitle">What a user should know before following this view</h3>
+                </div>
+              </div>
+              <div id="extractionEmpty" class="empty-state">
+                <span data-i18n="emptyState">Load the sample dataset or analyze a pasted post to generate receipts.</span>
+              </div>
+              <div id="extractionList" class="post-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-receipt">
+          <div class="content-grid receipt-layout">
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow" data-i18n="originalClaim">Original Claim</p>
+                  <h3 id="receiptTitle">No receipt selected</h3>
+                </div>
+                <span class="source-pill" id="receiptSource">Source</span>
+              </div>
+              <blockquote id="receiptText">Load sample data to inspect a call receipt.</blockquote>
+              <div class="receipt-meta" id="receiptMeta"></div>
+            </section>
+
+            <section class="receipt-card">
+              <div class="receipt-top">
+                <span data-i18n="receiptLabel">CONTEXT RECEIPT</span>
+                <strong id="receiptId">CL-0000</strong>
+              </div>
+              <div class="receipt-row">
+                <label data-i18n="asset">Asset</label>
+                <span id="receiptAsset">-</span>
+              </div>
+              <div class="receipt-row">
+                <label data-i18n="direction">Direction</label>
+                <span id="receiptDirection">-</span>
+              </div>
+              <div class="receipt-row">
+                <label data-i18n="callTimePrice">Call-time price</label>
+                <span id="receiptPrice">-</span>
+              </div>
+              <div class="receipt-row">
+                <label data-i18n="riskDisclosure">Risk disclosure</label>
+                <span id="receiptRisk">-</span>
+              </div>
+              <div class="receipt-row">
+                <label data-i18n="hypeEvidence">Hype-to-evidence</label>
+                <span id="receiptHype">-</span>
+              </div>
+              <div class="hash-box">
+                <label data-i18n="contentHash">Content hash</label>
+                <span id="receiptHash">sha256...</span>
+              </div>
+              <div class="receipt-status">
+                <label data-i18n="auditStatus">Audit status</label>
+                <span data-i18n="auditStatusValue">Versioned · appealable · non-advisory</span>
+              </div>
+            </section>
+          </div>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow" data-i18n="aiNotes">AI Notes</p>
+                <h3 data-i18n="aiNotesTitle">Why this call was scored this way</h3>
+              </div>
+            </div>
+            <div class="note-grid" id="receiptNotes"></div>
+          </section>
+        </section>
+
+        <section class="view" id="view-outcome">
+          <div class="content-grid two">
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow" data-i18n="heroFeature">Impact Analysis</p>
+                  <h3 data-i18n="slippageTitle">Follower execution gap</h3>
+                </div>
+              </div>
+              <p class="lede" data-i18n="slippageBody">
+                KOL visible result is not the same as follower realized result. This view compares the
+                best visible narrative with likely follower paths.
+              </p>
+              <div class="chart-card">
+                <svg id="priceChart" viewBox="0 0 640 260" role="img" aria-label="Price path chart"></svg>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow" data-i18n="outcomeSplit">Outcome Split</p>
+                  <h3 id="outcomeTitle">Select a call</h3>
+                </div>
+              </div>
+              <div class="outcome-metrics" id="outcomeMetrics"></div>
+              <div class="slippage-callout" id="slippageCallout">
+                Load sample data to compare KOL narrative and follower reality.
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-dashboard">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                  <p class="eyebrow" data-i18n="reputationLayer">Author Risk Profile</p>
+                  <h3 data-i18n="dashboardTitle">Behavioral pattern summary</h3>
+              </div>
+            </div>
+            <div class="kol-grid" id="kolDashboard"></div>
+          </section>
+        </section>
+
+        <section class="view" id="view-moderation">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                  <p class="eyebrow" data-i18n="platformView">Platform Review</p>
+                  <h3 data-i18n="moderationTitle">Content requiring additional context</h3>
+              </div>
+            </div>
+            <div class="moderation-list" id="moderationList"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="appealModal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="appealTitle">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow" data-i18n="fairnessFlow">Fairness Flow</p>
+            <h3 id="appealTitle">KOL appeal / add context</h3>
+          </div>
+          <button class="icon-btn" id="closeAppeal" aria-label="Close">x</button>
+        </div>
+        <p>
+          <span data-i18n="appealBody">The author can add missing context such as original entry, stop-loss logic, risk notes, or correction.
+          CallLedger stores the appeal as a new version instead of silently rewriting history.</span>
+        </p>
+        <textarea id="appealText">补充说明：原帖是观察观点，不是要求粉丝立刻追高；实际止损位在前一条帖子中提到。</textarea>
+        <div class="modal-actions">
+          <button class="secondary-btn" id="cancelAppeal" data-i18n="cancel">Cancel</button>
+          <button class="primary-btn" id="submitAppeal" data-i18n="attachContext">Attach context</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
