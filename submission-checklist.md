@@ -13,12 +13,13 @@
 - [x] Investment-advice disclaimer and public/synthetic data labeling
 - [x] Official-template deck: `SignalLedger-Official-Submission-Template.pptx`
 - [x] Video script: `demo-video-script.md`
+- [x] Local demo video: `SignalLedger-Demo-Video.mp4` (1:57, H.264, baked-in subtitles)
 
 ## Before Submit
 
 - [x] Add team name and member names to the deck.
 - [ ] Confirm the same names in the submission form.
-- [ ] Record a video under 3 minutes.
+- [x] Record a video under 3 minutes.
 - [ ] Upload the public Demo URL, GitHub URL, video, and PPTX.
 - [ ] Verify the GitHub repository is public in the browser.
 - [ ] Do not upload employer-private data, internal screenshots, credentials, or OAuth JSON files.
