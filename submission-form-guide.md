@@ -50,22 +50,26 @@ Use this sheet while completing the competition form. The canonical team names a
 ## 9. Demo Links
 
 - **Live product:** https://signalledger-ai-builder-cup.web.app
-- **Video player:** https://signalledger-ai-builder-cup.web.app/demo-video.html?v=names-corrected
+- **Video player:** https://signalledger-ai-builder-cup.web.app/demo-video.html?v=final
 - **Direct video file:** https://signalledger-ai-builder-cup.web.app/SignalLedger-Demo-Video-Zhangwei-Chen-Jiaoyi.mp4
 - **GitHub repository:** https://github.com/vzzzzzzz17/signalledger-ai-builder-cup-2026
 - **Solution deck:** `SignalLedger-Official-Submission-Template.pptx`
 
 If the form requests a video file upload, download the direct MP4 link and upload the file. It is under three minutes and includes voiceover plus baked-in subtitles.
 
-## 10. Submission File
+## 10. Paste-Ready Brief Description (under 1024 characters)
 
-Upload this file:
+> SignalLedger is a KOL-first context layer for social trading communities. It preserves source-linked public market commentary, structures each post into a Context Card, and compares an author's visible result with a realistic delayed follower path. Users can review the original claim, risk disclosure, evidence quality, promotional pressure, source link, historical profile, and later author additions without rewriting history. The product is deployed with Firebase Hosting and Cloud Run. Its API includes an opt-in Vertex AI Gemini path for structured extraction from market-call text and screenshots. The public Demo uses a deterministic fallback mode to avoid unexpected model charges, while the same API contract is ready for Gemini when enabled. SignalLedger uses public RSS sources, delayed Nasdaq/CoinGecko snapshots, caching, and clearly labeled synthetic scenarios. It does not provide investment advice or price predictions.
 
-`SignalLedger-Official-Submission-Template.pptx`
+## 11. Submission File
 
-The official template has been filled, the instruction/empty slides have been removed, and the links page includes the public demo, repository, and video link.
+Upload this PDF file, not the PPTX:
 
-## 11. Disclosures / Compliance
+`SignalLedger-Official-Submission-Template.pdf`
+
+The official template has been filled, the instruction/empty slides have been removed, and the links page includes the public demo, repository, and video link. The PDF is 13 pages and approximately 585 KB, under the 5 MB upload limit.
+
+## 12. Disclosures / Compliance
 
 Use these statements when the form asks about data, privacy, or financial advice:
 
@@ -75,17 +79,18 @@ Use these statements when the form asks about data, privacy, or financial advice
 
 > Public-source authors are represented through source-linked commentary and are not presented as endorsing SignalLedger. When a source is not a direct trade call, the product does not invent a trading outcome.
 
-## 12. Final Manual Checklist
+## 13. Final Manual Checklist
 
 - [ ] Enter `SignalLedger` as the team and project name.
 - [ ] Enter `Zhangwei` exactly as the team leader name.
 - [ ] Enter `Chen Jiaoyi` exactly as the team member name.
 - [ ] Paste the one-line pitch and solution description above.
 - [ ] Select or enter the BFSI theme/category.
-- [ ] Paste the live product URL.
+- [ ] Prototype Link: paste `https://signalledger-ai-builder-cup.web.app`.
+- [ ] Upload `SignalLedger-Official-Submission-Template.pdf`.
 - [ ] Paste the GitHub repository URL.
-- [ ] Upload `SignalLedger-Official-Submission-Template.pptx`.
-- [ ] Upload the MP4 from the direct video link, or paste the video player URL if the form accepts a URL.
+- [ ] Demo Video Link: paste `https://signalledger-ai-builder-cup.web.app/demo-video.html?v=final`.
+- [ ] Paste the brief description from section 10.
 - [ ] Confirm the GitHub repository is public in an incognito browser window.
 - [ ] Do not upload credentials, employer-private information, or the Google OAuth JSON file.
 - [ ] Take a final screenshot of the submitted confirmation page.
