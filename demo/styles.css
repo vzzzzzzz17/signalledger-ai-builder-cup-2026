@@ -338,6 +338,26 @@ button:disabled {
   box-shadow: 0 0 0 3px #e3f5ee;
 }
 
+.quote-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.quote-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 7px;
+  border: 1px solid #cceee4;
+  border-radius: 999px;
+  background: #f3fbf8;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 760;
+  white-space: nowrap;
+}
+
 .author-list {
   display: grid;
   gap: 10px;

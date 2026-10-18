@@ -67,6 +67,8 @@ Without Google Cloud credentials, the frontend remains fully usable and uses syn
 
 For a zero-model-cost demo deployment, set `ENABLE_LIVE_AI=false` (the default). The Cloud Run service then returns deterministic offline context and never calls Vertex AI. Set it to `true` only when a billing/credit budget has been explicitly approved.
 
+The community feed also requests a five-minute cached public market snapshot from Nasdaq delayed quotes and CoinGecko when available. The UI shows the snapshot status and falls back to the documented demo snapshot if an upstream source is unavailable. Author posts remain clearly labeled simulated public-style content until a specific licensed public source is selected.
+
 ## Firebase Deployment
 
 Initial submission is asynchronous. The required proof is a working link, a short demo video, a public repository, and a solution deck; no live presentation is required before the final round.

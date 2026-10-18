@@ -335,6 +335,7 @@ let calls = [];
 let selectedId = null;
 let selectedAuthor = "ChartSage";
 let marketFilter = "all";
+let marketQuotes = {};
 let appealCount = 0;
 let lang = "en";
 
@@ -371,7 +372,9 @@ const i18n = {
     filterCrypto: "Crypto",
     filterNeedsContext: "Needs context",
     searchAuthors: "Search authors or assets",
-    snapshotLabel: "Snapshot · simulated public data",
+    snapshotLabel: "Loading public market snapshot",
+    snapshotLive: "Delayed public market snapshot",
+    snapshotFallback: "Cached demo snapshot",
     featuredEyebrow: "Selected Author",
     featuredTitle: "Professional context at a glance",
     offlineLabel: "Offline-safe demo",
@@ -477,7 +480,9 @@ const i18n = {
     filterCrypto: "Crypto",
     filterNeedsContext: "需要上下文",
     searchAuthors: "搜索作者或标的",
-    snapshotLabel: "快照 · 模拟公开数据",
+    snapshotLabel: "正在加载公开行情快照",
+    snapshotLive: "公开延迟行情快照",
+    snapshotFallback: "缓存演示快照",
     featuredEyebrow: "当前作者",
     featuredTitle: "一眼看懂专业上下文",
     offlineLabel: "离线安全演示",
@@ -581,6 +586,20 @@ function fmtPrice(call) {
   return `$${call.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 }
 
+function fmtLivePrice(quote) {
+  if (!quote?.price) return "-";
+  if (["BTC", "ETH"].includes(quote.symbol)) return `$${quote.price.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+  if (["SOL", "DOGE"].includes(quote.symbol)) return `$${quote.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+  return `$${quote.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+}
+
+function liveQuoteTag(call) {
+  const quote = marketQuotes[call.asset];
+  if (!quote?.price) return "";
+  const change = quote.changePct == null ? "" : ` ${quote.changePct >= 0 ? "+" : ""}${Number(quote.changePct).toFixed(2)}%`;
+  return `<span class="quote-pill">${fmtLivePrice(quote)}${change}</span>`;
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -675,7 +694,7 @@ function renderAuthorFeed() {
             <span class="grade-pill ${gradeClass(profile.grade)}">${t("authorGrade")} ${profile.grade}</span>
           </div>
           <div class="author-signal">
-            <div class="post-top"><span class="eyebrow">${escapeHtml(latest.asset)} · ${escapeHtml(latest.source)}</span><span class="source-pill">${escapeHtml(latest.time.split(" ")[0])}</span></div>
+            <div class="post-top"><span class="eyebrow">${escapeHtml(latest.asset)} · ${escapeHtml(latest.source)}</span><span class="quote-group">${liveQuoteTag(latest)}<span class="source-pill">${escapeHtml(latest.time.split(" ")[0])}</span></span></div>
             <p>${escapeHtml(latest.text)}</p>
             <div class="post-tags"><span class="tag">${authorCalls.length} ${t("calls")}</span>${riskTag(latest)}<span class="tag ${metrics.gap > 10 ? "amber" : "green"}">${t("slippageGap")} ${fmtPct(metrics.gap)}</span></div>
           </div>
@@ -754,10 +773,12 @@ function renderReceipt() {
   $("#receiptTitle").textContent = `${call.author} · ${call.asset}`;
   $("#receiptSource").textContent = call.source;
   $("#receiptText").textContent = call.text;
+  const liveQuote = marketQuotes[call.asset];
   $("#receiptMeta").innerHTML = `
     <div class="meta-box"><label>${lang === "zh" ? "时间" : "Time"}</label><span>${call.time}</span></div>
     <div class="meta-box"><label>${lang === "zh" ? "市场" : "Market"}</label><span>${call.market}</span></div>
     <div class="meta-box"><label>${lang === "zh" ? "动作" : "Action"}</label><span>${call.action}</span></div>
+    ${liveQuote?.price ? `<div class="meta-box"><label>${lang === "zh" ? "公开行情快照" : "Public snapshot"}</label><span>${fmtLivePrice(liveQuote)} ${liveQuote.changePct == null ? "" : fmtPct(Number(liveQuote.changePct))}</span></div>` : ""}
   `;
   $("#receiptId").textContent = call.id;
   $("#receiptAsset").textContent = `${call.asset} · ${call.market}`;
@@ -975,6 +996,22 @@ function loadDataset() {
   if ($("#authorSearch")) $("#authorSearch").value = "";
   renderAll();
   showView("inbox");
+  loadMarketSnapshot();
+}
+
+async function loadMarketSnapshot() {
+  const status = $("#marketSnapshotStatus");
+  if (status) status.textContent = t("snapshotLabel");
+  try {
+    const response = await fetch("/api/market-snapshot");
+    if (!response.ok) throw new Error("Market snapshot unavailable");
+    const payload = await response.json();
+    marketQuotes = payload.quotes || {};
+    if (status) status.textContent = Object.keys(marketQuotes).length ? t("snapshotLive") : t("snapshotFallback");
+    renderAll();
+  } catch {
+    if (status) status.textContent = t("snapshotFallback");
+  }
 }
 
 async function analyzeManual() {

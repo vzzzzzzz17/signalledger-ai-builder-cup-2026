@@ -6,6 +6,8 @@ const projectId = process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT
 const location = process.env.VERTEX_LOCATION || "us-central1";
 const model = process.env.VERTEX_MODEL || "gemini-2.5-flash";
 const liveAiEnabled = process.env.ENABLE_LIVE_AI === "true";
+const stockSymbols = ["NVDA", "TSLA", "PLTR", "COIN", "MSTR", "AAPL", "MSFT", "AMD", "JPM", "SPY"];
+let marketCache = { expiresAt: 0, payload: null };
 
 const headers = {
   "Access-Control-Allow-Origin": process.env.ALLOWED_ORIGIN || "*",
@@ -17,6 +19,68 @@ const headers = {
 function send(res, status, body) {
   res.writeHead(status, headers);
   res.end(JSON.stringify(body));
+}
+
+async function fetchJson(url, timeoutMs = 3500) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, { signal: controller.signal, headers: { "User-Agent": "SignalLedger/1.0" } });
+    if (!response.ok) throw new Error(`Upstream returned ${response.status}`);
+    return response.json();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function parseNumber(value) {
+  const number = Number(String(value || "").replace(/[$,%+,]/g, ""));
+  return Number.isFinite(number) ? number : null;
+}
+
+async function fetchNasdaqQuote(symbol) {
+  const data = await fetchJson(`https://api.nasdaq.com/api/quote/${symbol}/info?assetclass=stocks`);
+  const primary = data.data?.primaryData;
+  if (!primary?.lastSalePrice) return null;
+  return {
+    symbol,
+    price: parseNumber(primary.lastSalePrice),
+    change: parseNumber(primary.netChange),
+    changePct: parseNumber(primary.percentageChange),
+    asOf: primary.lastTradeTimestamp || null,
+    source: "Nasdaq delayed quote",
+  };
+}
+
+async function fetchCryptoQuotes() {
+  const data = await fetchJson("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,dogecoin&vs_currencies=usd&include_24hr_change=true");
+  return {
+    BTC: { symbol: "BTC", price: data.bitcoin?.usd || null, changePct: data.bitcoin?.usd_24h_change || null, source: "CoinGecko public snapshot" },
+    ETH: { symbol: "ETH", price: data.ethereum?.usd || null, changePct: data.ethereum?.usd_24h_change || null, source: "CoinGecko public snapshot" },
+    SOL: { symbol: "SOL", price: data.solana?.usd || null, changePct: data.solana?.usd_24h_change || null, source: "CoinGecko public snapshot" },
+    DOGE: { symbol: "DOGE", price: data.dogecoin?.usd || null, changePct: data.dogecoin?.usd_24h_change || null, source: "CoinGecko public snapshot" },
+  };
+}
+
+async function marketSnapshot() {
+  if (marketCache.payload && marketCache.expiresAt > Date.now()) return marketCache.payload;
+  const quotes = {};
+  const stocks = await Promise.all(stockSymbols.map(async (symbol) => {
+    try {
+      return await fetchNasdaqQuote(symbol);
+    } catch {
+      return null;
+    }
+  }));
+  stocks.filter(Boolean).forEach((quote) => { quotes[quote.symbol] = quote; });
+  try {
+    Object.assign(quotes, await fetchCryptoQuotes());
+  } catch {
+    // A delayed quote is optional; the UI keeps its documented offline snapshot.
+  }
+  const payload = { ok: true, asOf: new Date().toISOString(), quotes, source: "Public delayed market snapshots" };
+  marketCache = { payload, expiresAt: Date.now() + 5 * 60 * 1000 };
+  return payload;
 }
 
 function readBody(req) {
@@ -84,6 +148,14 @@ function offlineAnalysis(text) {
 const server = http.createServer(async (req, res) => {
   if (req.method === "OPTIONS") return send(res, 204, {});
   if (req.method === "GET" && req.url === "/health") return send(res, 200, { ok: true, service: "signalledger-api" });
+  if (req.method === "GET" && req.url === "/api/market-snapshot") {
+    try {
+      return send(res, 200, await marketSnapshot());
+    } catch (error) {
+      console.error(error);
+      return send(res, 502, { ok: false, error: "Market snapshot unavailable" });
+    }
+  }
   if (req.method !== "POST" || req.url !== "/api/analyze") return send(res, 404, { error: "Not found" });
 
   try {
