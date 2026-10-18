@@ -36,7 +36,7 @@ Already created:
 - KOL appeal / add-context flow.
 - Public RSS author feeds with source links.
 - Public delayed market snapshots from Nasdaq and CoinGecko.
-- Formal deck: `SignalLedger-Solution-Deck.pptx`.
+- Formal official-template deck: `SignalLedger-Official-Submission-Template.pptx`.
 
 ## What Is Missing
 
@@ -146,7 +146,7 @@ Avoid providing:
 
 ### Phase 3: Submission Assets
 
-- Upload `SignalLedger-Solution-Deck.pptx`.
+- Upload `SignalLedger-Official-Submission-Template.pptx`.
 - Record the 3-minute video from `demo-video-script.md`.
 - Create README and architecture diagram.
 - Final compliance pass.

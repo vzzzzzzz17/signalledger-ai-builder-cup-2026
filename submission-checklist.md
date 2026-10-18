@@ -11,12 +11,13 @@
 - [x] Context card, follower impact, author profile, review queue, and appeal flow
 - [x] Bilingual interface
 - [x] Investment-advice disclaimer and public/synthetic data labeling
-- [x] Formal deck: `SignalLedger-Solution-Deck.pptx`
+- [x] Official-template deck: `SignalLedger-Official-Submission-Template.pptx`
 - [x] Video script: `demo-video-script.md`
 
 ## Before Submit
 
 - [ ] Add team name and member names to the deck and submission form.
+- [ ] Replace `[ADD NAME]` on the Team Details slide.
 - [ ] Record a video under 3 minutes.
 - [ ] Upload the public Demo URL, GitHub URL, video, and PPTX.
 - [ ] Verify the GitHub repository is public in the browser.

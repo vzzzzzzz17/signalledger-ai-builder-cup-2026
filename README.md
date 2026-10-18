@@ -112,13 +112,14 @@ submission-plan.md
 solution-deck.md
 demo-video-script.md
 SignalLedger-Solution-Deck.pptx
+SignalLedger-Official-Submission-Template.pptx
 submission-checklist.md
 recording-runbook.md
 ```
 
 ## Submission Assets
 
-1. `SignalLedger-Solution-Deck.pptx`
+1. `SignalLedger-Official-Submission-Template.pptx`
 2. `demo-video-script.md`
 3. `recording-runbook.md`
 4. `submission-checklist.md`
