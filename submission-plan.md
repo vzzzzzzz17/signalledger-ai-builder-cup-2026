@@ -42,20 +42,18 @@ Already created:
 
 ### 1. Real Google AI Integration
 
-The deployed demo has a Cloud Run backend with a Gemini/Vertex AI path, gated off by default to keep the public prototype within zero-model-cost mode. The endpoint can:
+The deployed demo has a live Cloud Run backend using Gemini 2.5 Flash through Vertex AI. The model is invoked when the user explicitly submits a post for analysis. A real request through Firebase Hosting and a direct Cloud Run request both returned `live: true`.
+
+The endpoint can:
 
 - Extract asset, direction, horizon, evidence, risk disclosure, and promotional pressure from pasted text.
-- Optionally analyze uploaded screenshots.
+- Return structured JSON to the frontend.
 - Return structured JSON for the frontend.
 
-Minimum acceptable version:
+Current verified version:
 
-- Text input to Gemini.
-- Screenshot upload can remain simulated if time is tight, but deck should explain the intended multimodal path.
-
-Better version:
-
-- Text + image upload to Gemini multimodal.
+- Text input to Gemini 2.5 Flash.
+- Asset, direction, horizon, evidence, risk disclosure, promotional pressure, summary, and flags are returned as structured JSON.
 
 ### 2. Deployable App
 
@@ -137,7 +135,7 @@ Avoid providing:
 
 - KOL-first web app and public demo are complete.
 - README, source-linked feeds, and API route are complete.
-- Gemini extraction prompt and API route are complete; live calls remain opt-in.
+- Gemini extraction prompt and API route are complete; live calls are enabled on explicit Analyze actions.
 
 ### Phase 2: Google Cloud Deployment
 

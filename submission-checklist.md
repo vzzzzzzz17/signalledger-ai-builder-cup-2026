@@ -26,10 +26,10 @@
 
 ## Technical Note
 
-The deployed Cloud Run service uses `ENABLE_LIVE_AI=false` to avoid unexpected Vertex AI charges. The Gemini/Vertex AI extraction path is implemented and can be enabled explicitly, but the public Demo uses deterministic offline context plus source-linked public feeds.
+The deployed Cloud Run service uses `ENABLE_LIVE_AI=true`. A real test through Firebase Hosting and a direct Cloud Run request both returned `live: true` with `model: gemini-2.5-flash`. The homepage does not call the model automatically; Gemini is invoked only when the user submits text through the Analyze action. The deterministic offline path remains available when `ENABLE_LIVE_AI=false`.
 
 ## Submission Copy
 
 **One-line pitch:** SignalLedger is the professional context layer for social trading communities, helping users understand who said what, what was disclosed, and how a realistic follower path may differ from the author's visible result.
 
-**Short description:** SignalLedger is a KOL-first financial context product. It combines source-linked public market commentary, delayed market snapshots, explainable context cards, follower-impact scenarios, and versioned author additions. It does not predict prices or provide investment advice. The prototype runs on Firebase Hosting and Cloud Run, with an opt-in Gemini/Vertex AI extraction path and a zero-model-cost default mode for safe demonstration.
+**Short description:** SignalLedger is a KOL-first financial context product. It combines source-linked public market commentary, delayed market snapshots, explainable context cards, follower-impact scenarios, and versioned author additions. It does not predict prices or provide investment advice. The prototype runs on Firebase Hosting and Cloud Run; an explicit Analyze action invokes Gemini 2.5 Flash through Vertex AI to structure a pasted market post.

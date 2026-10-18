@@ -39,7 +39,7 @@ Use this sheet while completing the competition form. The canonical team names a
 
 ## 7. Google AI / Google Cloud Technology
 
-> The application is deployed with Firebase Hosting and Cloud Run. The Cloud Run API contains an opt-in Vertex AI Gemini extraction path for structured analysis of market-call text and screenshots, including asset, direction, time horizon, evidence, risk disclosure, and promotional pressure. The public Demo defaults to a deterministic offline context mode to avoid unexpected model charges; the same API contract supports enabling Gemini when a funded project budget is approved. Public RSS feeds, delayed Nasdaq/CoinGecko snapshots, caching, and the frontend are connected through the deployed Google Cloud architecture.
+> The application is deployed with Firebase Hosting and Cloud Run in the Google Cloud project `signalledger-ai-builder-cup`. When a user explicitly clicks Analyze, the Cloud Run API calls Vertex AI Gemini 2.5 Flash to structure a pasted market-call text into asset, direction, time horizon, evidence, risk disclosure, promotional pressure, and flags. A real production request was verified through both Firebase Hosting and the direct Cloud Run endpoint with `live: true`. Public RSS feeds, delayed Nasdaq/CoinGecko snapshots, caching, and the frontend are connected through the Google Cloud architecture.
 
 **Technologies:** Firebase Hosting, Cloud Run, Node.js, Vertex AI Gemini path, JavaScript, public RSS, Nasdaq delayed quotes, CoinGecko public snapshots.
 
@@ -59,7 +59,7 @@ If the form requests a video file upload, download the direct MP4 link and uploa
 
 ## 10. Paste-Ready Brief Description (under 1024 characters)
 
-> SignalLedger is a KOL-first context layer for social trading communities. It preserves source-linked public market commentary, structures each post into a Context Card, and compares an author's visible result with a realistic delayed follower path. Users can review the original claim, risk disclosure, evidence quality, promotional pressure, source link, historical profile, and later author additions without rewriting history. The product is deployed with Firebase Hosting and Cloud Run. Its API includes an opt-in Vertex AI Gemini path for structured extraction from market-call text and screenshots. The public Demo uses a deterministic fallback mode to avoid unexpected model charges, while the same API contract is ready for Gemini when enabled. SignalLedger uses public RSS sources, delayed Nasdaq/CoinGecko snapshots, caching, and clearly labeled synthetic scenarios. It does not provide investment advice or price predictions.
+> SignalLedger is a KOL-first context layer for social trading communities. It preserves source-linked public market commentary, structures each post into a Context Card, and compares an author's visible result with a realistic delayed follower path. Users can review the original claim, risk disclosure, evidence quality, promotional pressure, source link, historical profile, and later author additions without rewriting history. The product is deployed with Firebase Hosting and Cloud Run. When a user clicks Analyze, Cloud Run calls Vertex AI Gemini 2.5 Flash to extract structured context from pasted market-call text. SignalLedger uses public RSS sources, delayed Nasdaq/CoinGecko snapshots, caching, and clearly labeled synthetic scenarios. It does not provide investment advice or price predictions.
 
 ## 11. Submission File
 
