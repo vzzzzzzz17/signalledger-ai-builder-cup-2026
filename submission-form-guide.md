@@ -55,7 +55,7 @@ Use this sheet while completing the competition form. The canonical team names a
 - **GitHub repository:** https://github.com/vzzzzzzz17/signalledger-ai-builder-cup-2026
 - **Solution deck:** `SignalLedger-Official-Submission-Template.pptx`
 
-If the form requests a video file upload, download the direct MP4 link and upload the file. It is under three minutes and includes voiceover plus baked-in subtitles.
+If the form requests a video file upload, download the direct MP4 link and upload the file. It is 2:53 and includes voiceover plus baked-in subtitles.
 
 ## 10. Paste-Ready Brief Description (under 1024 characters)
 

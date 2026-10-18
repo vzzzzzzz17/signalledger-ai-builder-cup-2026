@@ -13,7 +13,7 @@
 - [x] Investment-advice disclaimer and public/synthetic data labeling
 - [x] Official-template deck: `SignalLedger-Official-Submission-Template.pptx`
 - [x] Video script: `demo-video-script.md`
-- [x] Local demo video: `SignalLedger-Demo-Video.mp4` (1:57, H.264/AAC, voiceover, baked-in subtitles)
+- [x] Local demo video: `SignalLedger-Demo-Video.mp4` (2:53, H.264/AAC, voiceover, baked-in subtitles, under 3 minutes)
 
 ## Before Submit
 
