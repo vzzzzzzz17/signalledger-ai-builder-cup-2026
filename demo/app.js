@@ -333,14 +333,16 @@ const kolProfiles = {
 
 let calls = [];
 let selectedId = null;
+let selectedAuthor = "ChartSage";
+let marketFilter = "all";
 let appealCount = 0;
 let lang = "en";
 
 const i18n = {
   en: {
     brandSub: "Community intelligence layer",
-    navInbox: "Community",
-    navReceipt: "Context Card",
+    navInbox: "Discover",
+    navReceipt: "Signal Detail",
     navOutcome: "Follower Impact",
     navDashboard: "Author Profile",
     navModeration: "Review Queue",
@@ -349,11 +351,12 @@ const i18n = {
     topEyebrow: "BFSI Prototype",
     topTitle: "A trading community with professional context beside every market call.",
     reset: "Reset",
-    loadDataset: "Open community feed",
+    loadDataset: "Refresh snapshot",
     problemEyebrow: "Community Layer",
-    heroTitle: "Users browse the feed. SignalLedger adds the missing professional context.",
+    heroTitle: "Follow the people shaping the market conversation.",
     heroBody:
-      "SignalLedger keeps the community experience, but adds structured context: evidence quality, risk disclosure, author behavior, and realistic follower outcomes.",
+      "SignalLedger helps you understand an author's claims, process, and follower impact before a hot take becomes a trade.",
+    authorsTracked: "Authors tracked",
     callsLoaded: "Calls loaded",
     receiptsCreated: "Context cards",
     highRiskFlags: "High-risk flags",
@@ -362,7 +365,16 @@ const i18n = {
     pipeTrack: "Compare KOL narrative and follower path",
     pipeReview: "Keep a versioned record",
     inputEyebrow: "Community Feed",
-    inputTitle: "Browse market calls across stocks and crypto",
+    inputTitle: "Authors worth watching today",
+    filterAll: "All authors",
+    filterStocks: "US equities",
+    filterCrypto: "Crypto",
+    filterNeedsContext: "Needs context",
+    searchAuthors: "Search authors or assets",
+    snapshotLabel: "Snapshot · simulated public data",
+    featuredEyebrow: "Selected Author",
+    featuredTitle: "Professional context at a glance",
+    offlineLabel: "Offline-safe demo",
     sourcePublic: "Market chatter",
     sourceBroker: "Broker feed",
     sourceCrypto: "Crypto calls",
@@ -373,7 +385,7 @@ const i18n = {
     analysisFallback: "Offline demo context added.",
     extractEyebrow: "Professional Context",
     extractTitle: "What a user should know before following this view",
-    emptyState: "Open the community feed or analyze a pasted post to add context.",
+    emptyState: "No authors match this filter.",
     originalClaim: "Original Post",
     receiptLabel: "SIGNAL CONTEXT",
     asset: "Asset",
@@ -413,6 +425,9 @@ const i18n = {
     promotionalPressure: "Promotional pressure",
     evidenceQuality: "Evidence quality",
     authorGrade: "Review grade",
+    viewProfile: "View profile",
+    viewLatest: "Open latest",
+    latestSignals: "Latest signals",
     appealButton: "Appeal / add context",
     calls: "calls",
     followerLossCases: "follower-loss cases",
@@ -432,8 +447,8 @@ const i18n = {
   },
   zh: {
     brandSub: "交易社区专业上下文层",
-    navInbox: "社区",
-    navReceipt: "上下文卡片",
+    navInbox: "发现",
+    navReceipt: "观点详情",
     navOutcome: "跟单影响",
     navDashboard: "作者画像",
     navModeration: "审核队列",
@@ -442,11 +457,12 @@ const i18n = {
     topEyebrow: "金融科技原型",
     topTitle: "一个在每条市场观点旁提供专业上下文的交易社区。",
     reset: "重置",
-    loadDataset: "打开社区信息流",
+    loadDataset: "刷新快照",
     problemEyebrow: "社区层",
-    heroTitle: "用户进来逛社区，SignalLedger 在旁边补上专业上下文。",
+    heroTitle: "关注正在塑造市场讨论的人。",
     heroBody:
-      "SignalLedger 保留社区浏览体验，同时补充证据质量、风险披露、作者历史行为和普通粉丝可能经历的真实路径。",
+      "SignalLedger 帮你在热门观点变成交易之前，理解作者的主张、过程和粉丝影响。",
+    authorsTracked: "跟踪作者",
     callsLoaded: "已加载喊单",
     receiptsCreated: "上下文卡片",
     highRiskFlags: "高风险标记",
@@ -455,7 +471,16 @@ const i18n = {
     pipeTrack: "比较 KOL 叙事和粉丝路径",
     pipeReview: "保留版本记录",
     inputEyebrow: "社区信息流",
-    inputTitle: "浏览美股和 Crypto 市场观点",
+    inputTitle: "今天值得关注的作者",
+    filterAll: "全部作者",
+    filterStocks: "美股",
+    filterCrypto: "Crypto",
+    filterNeedsContext: "需要上下文",
+    searchAuthors: "搜索作者或标的",
+    snapshotLabel: "快照 · 模拟公开数据",
+    featuredEyebrow: "当前作者",
+    featuredTitle: "一眼看懂专业上下文",
+    offlineLabel: "离线安全演示",
     sourcePublic: "市场讨论",
     sourceBroker: "券商社区",
     sourceCrypto: "Crypto 喊单",
@@ -466,7 +491,7 @@ const i18n = {
     analysisFallback: "已加入离线演示上下文。",
     extractEyebrow: "专业上下文",
     extractTitle: "用户跟随这条观点前应该知道什么",
-    emptyState: "打开社区信息流或分析粘贴内容，为观点补充上下文。",
+    emptyState: "没有符合条件的作者。",
     originalClaim: "原始帖子",
     receiptLabel: "信号上下文",
     asset: "标的",
@@ -505,6 +530,9 @@ const i18n = {
     promotionalPressure: "推广压力",
     evidenceQuality: "证据质量",
     authorGrade: "复核等级",
+    viewProfile: "查看画像",
+    viewLatest: "打开最新观点",
+    latestSignals: "最新观点",
     appealButton: "申诉 / 补充说明",
     calls: "条喊单",
     followerLossCases: "个粉丝亏损案例",
@@ -532,6 +560,9 @@ function applyLanguage() {
   document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
   $$("[data-i18n]").forEach((node) => {
     node.textContent = t(node.dataset.i18n);
+  });
+  $$('[data-i18n-placeholder]').forEach((node) => {
+    node.placeholder = t(node.dataset.i18nPlaceholder);
   });
   $("#langToggle").textContent = t("langToggle");
   $("#manualPost").placeholder = lang === "zh" ? "在这里粘贴一条市场喊单..." : "Paste a market call here...";
@@ -581,46 +612,124 @@ function riskTag(call) {
 }
 
 function renderStats() {
+  const authors = Object.keys(groupedByAuthor());
+  $("#statAuthors").textContent = authors.length;
   $("#statCalls").textContent = calls.length;
-  $("#statReceipts").textContent = calls.length;
   $("#statFlagged").textContent = calls.filter((call) => call.hype >= 75 || call.returns.follower < -5).length;
 }
 
-function renderPostList() {
-  const list = $("#extractionList");
-  const empty = $("#extractionEmpty");
-  if (!calls.length) {
-    empty.style.display = "grid";
-    list.innerHTML = "";
-    return;
+function authorMatches(author, authorCalls, search) {
+  const haystack = `${author} ${authorCalls.map((call) => `${call.asset} ${call.text}`).join(" ")}`.toLowerCase();
+  if (search && !haystack.includes(search)) return false;
+  if (marketFilter === "all") return true;
+  if (marketFilter === "needs-context") {
+    return average(authorCalls, (call) => call.risk) < 55 || average(authorCalls, (call) => call.hype) >= 75;
   }
-  empty.style.display = "none";
-  list.innerHTML = calls
-    .map(
-      (call) => `
-        <button class="post-card ${call.id === selectedId ? "active" : ""}" data-call-id="${call.id}">
-          <div class="post-top">
-            <span class="post-author">${escapeHtml(call.author)}</span>
-            <span class="source-pill">${escapeHtml(call.source)}</span>
+  return authorCalls.some((call) => call.market === marketFilter);
+}
+
+function authorInitials(author) {
+  return author
+    .split(/\s+/)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+function authorMetrics(authorCalls) {
+  return {
+    risk: Math.round(average(authorCalls, (call) => call.risk)),
+    hype: Math.round(average(authorCalls, (call) => call.hype)),
+    gap: Math.round(average(authorCalls, (call) => call.returns.maxFav - call.returns.follower)),
+    losses: authorCalls.filter((call) => call.returns.follower < 0).length,
+  };
+}
+
+function renderAuthorFeed() {
+  const list = $("#authorList");
+  const empty = $("#authorEmpty");
+  if (!list || !empty) return;
+  const search = $("#authorSearch")?.value.trim().toLowerCase() || "";
+  const authors = Object.entries(groupedByAuthor())
+    .filter(([author, authorCalls]) => authorMatches(author, authorCalls, search))
+    .sort(([, firstCalls], [, secondCalls]) => {
+      const firstGap = authorMetrics(firstCalls).gap;
+      const secondGap = authorMetrics(secondCalls).gap;
+      return secondGap - firstGap;
+    });
+
+  empty.hidden = authors.length > 0;
+  list.innerHTML = authors
+    .map(([author, authorCalls]) => {
+      const profile = kolProfiles[author] || { description: "Imported public author", grade: "B" };
+      const metrics = authorMetrics(authorCalls);
+      const latest = authorCalls[authorCalls.length - 1];
+      return `
+        <article class="author-card ${author === selectedAuthor ? "selected" : ""}">
+          <div class="author-card-head">
+            <button class="author-identity" data-author="${escapeHtml(author)}">
+              <span class="author-avatar">${authorInitials(author)}</span>
+              <span><strong>${escapeHtml(author)}</strong><small>${escapeHtml(profile.description)}</small></span>
+            </button>
+            <span class="grade-pill ${gradeClass(profile.grade)}">${t("authorGrade")} ${profile.grade}</span>
           </div>
-          <p class="post-text">${escapeHtml(call.text)}</p>
-          <div class="post-tags">
-            <span class="tag">${call.asset} · ${call.direction}</span>
-            ${riskTag(call)}
-            <span class="tag ${call.hype >= 75 ? "red" : call.hype >= 40 ? "amber" : "green"}">${t("promotionalPressure")} ${call.hype}</span>
+          <div class="author-signal">
+            <div class="post-top"><span class="eyebrow">${escapeHtml(latest.asset)} · ${escapeHtml(latest.source)}</span><span class="source-pill">${escapeHtml(latest.time.split(" ")[0])}</span></div>
+            <p>${escapeHtml(latest.text)}</p>
+            <div class="post-tags"><span class="tag">${authorCalls.length} ${t("calls")}</span>${riskTag(latest)}<span class="tag ${metrics.gap > 10 ? "amber" : "green"}">${t("slippageGap")} ${fmtPct(metrics.gap)}</span></div>
           </div>
-        </button>
-      `,
-    )
+          <div class="author-card-footer">
+            <span class="author-stat"><b>${metrics.risk}</b><small>${t("riskDisclosure")}</small></span>
+            <span class="author-stat"><b>${metrics.hype}</b><small>${t("promotionalPressure")}</small></span>
+            <div class="author-actions"><button class="text-btn open-author" data-author="${escapeHtml(author)}">${t("viewProfile")}</button><button class="text-btn open-call" data-call-id="${latest.id}">${t("viewLatest")}</button></div>
+          </div>
+        </article>
+      `;
+    })
     .join("");
 
-  $$(".post-card").forEach((button) => {
+  $$(".open-author, .author-identity").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedAuthor = button.dataset.author;
+      const firstCall = calls.find((call) => call.author === selectedAuthor);
+      if (firstCall) selectedId = firstCall.id;
+      renderAll();
+      showView("dashboard");
+    });
+  });
+  $$(".open-call").forEach((button) => {
     button.addEventListener("click", () => {
       selectedId = button.dataset.callId;
+      selectedAuthor = selectedCall()?.author || selectedAuthor;
       renderAll();
       showView("receipt");
     });
   });
+}
+
+function renderFeaturedAuthor() {
+  const container = $("#featuredAuthor");
+  if (!container) return;
+  const authorCalls = calls.filter((call) => call.author === selectedAuthor);
+  if (!authorCalls.length) {
+    container.innerHTML = `<div class="empty-state">${t("emptyState")}</div>`;
+    return;
+  }
+  const profile = kolProfiles[selectedAuthor] || { description: "Imported public author", grade: "B" };
+  const metrics = authorMetrics(authorCalls);
+  container.innerHTML = `
+    <div class="featured-identity"><span class="author-avatar large">${authorInitials(selectedAuthor)}</span><div><h4>${escapeHtml(selectedAuthor)}</h4><p>${escapeHtml(profile.description)}</p></div><span class="grade-pill ${gradeClass(profile.grade)}">${profile.grade}</span></div>
+    <div class="featured-metrics"><div><strong>${metrics.risk}</strong><span>${t("riskDisclosure")}</span></div><div><strong>${metrics.gap}%</strong><span>${t("slippageGap")}</span></div></div>
+    <div class="featured-call-list"><p class="eyebrow">${t("latestSignals")}</p>${authorCalls.slice(-3).reverse().map((call) => `<button class="featured-call open-call" data-call-id="${call.id}"><span><b>${escapeHtml(call.asset)}</b><small>${escapeHtml(call.text)}</small></span><span class="tag ${call.risk >= 75 ? "green" : "amber"}">${call.risk}</span></button>`).join("")}</div>
+    <button class="secondary-btn full open-appeal" data-author="${escapeHtml(selectedAuthor)}">${t("appealButton")}</button>
+  `;
+  $$("#featuredAuthor .open-call").forEach((button) => button.addEventListener("click", () => {
+    selectedId = button.dataset.callId;
+    renderAll();
+    showView("receipt");
+  }));
+  $$("#featuredAuthor .open-appeal").forEach((button) => button.addEventListener("click", () => openAppeal(button.dataset.author)));
 }
 
 function selectedCall() {
@@ -631,7 +740,15 @@ function renderReceipt() {
   const call = selectedCall();
   if (!call) {
     $("#receiptTitle").textContent = t("noReceipt");
+    $("#receiptSource").textContent = "Source";
     $("#receiptText").textContent = t("loadToInspect");
+    $("#receiptMeta").innerHTML = "";
+    $("#receiptId").textContent = "SL-0000";
+    ["receiptAsset", "receiptDirection", "receiptPrice", "receiptRisk", "receiptHype"].forEach((id) => {
+      $(`#${id}`).textContent = "-";
+    });
+    $("#receiptHash").textContent = "sha256...";
+    $("#receiptNotes").innerHTML = "";
     return;
   }
   $("#receiptTitle").textContent = `${call.author} · ${call.asset}`;
@@ -706,6 +823,8 @@ function renderOutcome() {
   const call = selectedCall();
   if (!call) {
     $("#outcomeTitle").textContent = t("selectCall");
+    $("#priceChart").innerHTML = "";
+    $("#outcomeMetrics").innerHTML = "";
     $("#slippageCallout").textContent = t("loadToCompare");
     return;
   }
@@ -832,8 +951,11 @@ function renderModeration() {
 
 function renderAll() {
   if (!selectedId && calls.length) selectedId = calls[0].id;
+  const activeCall = selectedCall();
+  if (activeCall) selectedAuthor = activeCall.author;
   renderStats();
-  renderPostList();
+  renderAuthorFeed();
+  renderFeaturedAuthor();
   renderReceipt();
   renderOutcome();
   renderKolDashboard();
@@ -848,6 +970,9 @@ function showView(view) {
 function loadDataset() {
   calls = sampleCalls.map((call) => ({ ...call }));
   selectedId = "SL-3001";
+  selectedAuthor = "CryptoWhale";
+  marketFilter = "all";
+  if ($("#authorSearch")) $("#authorSearch").value = "";
   renderAll();
   showView("inbox");
 }
@@ -941,6 +1066,9 @@ function bindEvents() {
   $("#resetDemo").addEventListener("click", () => {
     calls = [];
     selectedId = null;
+    selectedAuthor = "ChartSage";
+    marketFilter = "all";
+    if ($("#authorSearch")) $("#authorSearch").value = "";
     renderAll();
     showView("inbox");
   });
@@ -952,11 +1080,19 @@ function bindEvents() {
   $("#closeAppeal").addEventListener("click", closeAppeal);
   $("#cancelAppeal").addEventListener("click", closeAppeal);
   $("#submitAppeal").addEventListener("click", submitAppeal);
+  $$("#marketFilters .filter-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      marketFilter = button.dataset.market;
+      $$("#marketFilters .filter-btn").forEach((item) => item.classList.toggle("active", item === button));
+      renderAuthorFeed();
+    });
+  });
+  $("#authorSearch").addEventListener("input", renderAuthorFeed);
   $("#appealModal").addEventListener("click", (event) => {
     if (event.target.id === "appealModal") closeAppeal();
   });
 }
 
 bindEvents();
-renderAll();
+loadDataset();
 applyLanguage();

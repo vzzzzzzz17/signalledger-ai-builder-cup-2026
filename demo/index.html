@@ -40,86 +40,79 @@
           <div class="topbar-actions">
             <button class="secondary-btn" id="langToggle">中文</button>
             <button class="secondary-btn" id="resetDemo" data-i18n="reset">Reset</button>
-            <button class="primary-btn" id="loadDataset" data-i18n="loadDataset">Open community feed</button>
+            <button class="primary-btn" id="loadDataset" data-i18n="loadDataset">Refresh snapshot</button>
           </div>
         </header>
 
         <section class="view active" id="view-inbox">
-          <div class="audit-summary">
+          <div class="community-hero">
             <div>
               <p class="eyebrow" data-i18n="problemEyebrow">Community Layer</p>
-              <h3 data-i18n="heroTitle">Users browse the feed. SignalLedger adds the missing professional context.</h3>
-              <p data-i18n="heroBody">
-                SignalLedger converts X posts, broker-community screenshots, crypto calls, and chat snippets
-                into structured context cards with risk disclosure, evidence quality, and follower outcome tracking.
-              </p>
+              <h3 data-i18n="heroTitle">Follow the people shaping the market conversation.</h3>
+              <p data-i18n="heroBody">SignalLedger helps you understand an author's claims, process, and follower impact before a hot take becomes a trade.</p>
             </div>
             <div class="hero-stats">
-              <div>
-                <span id="statCalls">0</span>
-                <label data-i18n="callsLoaded">Calls loaded</label>
-              </div>
-              <div>
-                <span id="statReceipts">0</span>
-                <label data-i18n="receiptsCreated">Context cards</label>
-              </div>
-              <div>
-                <span id="statFlagged">0</span>
-                <label data-i18n="highRiskFlags">High-risk flags</label>
-              </div>
-            </div>
-            <div class="pipeline">
-              <div><strong>1</strong><span data-i18n="pipeIngest">Browse community posts</span></div>
-              <div><strong>2</strong><span data-i18n="pipeExtract">Open professional context</span></div>
-              <div><strong>3</strong><span data-i18n="pipeTrack">Compare KOL narrative and follower path</span></div>
-              <div><strong>4</strong><span data-i18n="pipeReview">Keep a versioned record</span></div>
+              <div><span id="statAuthors">0</span><label data-i18n="authorsTracked">Authors tracked</label></div>
+              <div><span id="statCalls">0</span><label data-i18n="callsLoaded">Public calls</label></div>
+              <div><span id="statFlagged">0</span><label data-i18n="highRiskFlags">Needs context</label></div>
             </div>
           </div>
 
-          <div class="content-grid two">
-            <section class="panel">
+          <div class="community-toolbar">
+            <div class="filter-group" id="marketFilters" role="group" aria-label="Market filters">
+              <button class="filter-btn active" data-market="all" data-i18n="filterAll">All authors</button>
+              <button class="filter-btn" data-market="US Stock" data-i18n="filterStocks">US equities</button>
+              <button class="filter-btn" data-market="Crypto" data-i18n="filterCrypto">Crypto</button>
+              <button class="filter-btn" data-market="needs-context" data-i18n="filterNeedsContext">Needs context</button>
+            </div>
+            <label class="search-field">
+              <span aria-hidden="true">⌕</span>
+              <input id="authorSearch" type="search" data-i18n-placeholder="searchAuthors" placeholder="Search authors or assets" />
+            </label>
+          </div>
+
+          <div class="community-layout">
+            <section class="panel author-stream">
               <div class="panel-header">
                 <div>
                   <p class="eyebrow" data-i18n="inputEyebrow">Community Feed</p>
-                  <h3 data-i18n="inputTitle">Browse market calls across stocks and crypto</h3>
+                  <h3 data-i18n="inputTitle">Authors worth watching today</h3>
                 </div>
+                <span class="live-label"><i></i><span data-i18n="snapshotLabel">Snapshot · simulated public data</span></span>
               </div>
-              <div class="intake-grid">
-                <button class="intake-source active">
-                  <strong>X</strong>
-                  <span data-i18n="sourcePublic">Market chatter</span>
-                </button>
-                <button class="intake-source">
-                  <strong>Broker</strong>
-                  <span data-i18n="sourceBroker">Broker feed</span>
-                </button>
-                <button class="intake-source">
-                  <strong>Crypto</strong>
-                  <span data-i18n="sourceCrypto">Crypto calls</span>
-                </button>
-                <button class="intake-source">
-                  <strong>Watch</strong>
-                  <span data-i18n="sourceChat">Needs context</span>
-                </button>
+              <div id="authorList" class="author-list"></div>
+              <div id="authorEmpty" class="empty-state" hidden>
+                <span data-i18n="emptyState">No authors match this filter.</span>
               </div>
-              <textarea id="manualPost" placeholder="Paste a market call here...">TSLA 要起飞了，聪明钱已经进场，别等错过才后悔。</textarea>
-              <button class="secondary-btn full" id="analyzeManual" data-i18n="analyzeManual">Analyze pasted post</button>
-              <p class="analysis-status" id="analysisStatus" aria-live="polite"></p>
             </section>
 
-            <section class="panel">
+            <aside class="panel featured-author-panel">
               <div class="panel-header">
                 <div>
-                  <p class="eyebrow" data-i18n="extractEyebrow">Professional Context</p>
-                  <h3 data-i18n="extractTitle">What a user should know before following this view</h3>
+                  <p class="eyebrow" data-i18n="featuredEyebrow">Selected Author</p>
+                  <h3 data-i18n="featuredTitle">Professional context at a glance</h3>
                 </div>
               </div>
-              <div id="extractionEmpty" class="empty-state">
-                <span data-i18n="emptyState">Open the community feed or analyze a pasted post to add context.</span>
-              </div>
-              <div id="extractionList" class="post-list"></div>
-            </section>
+              <div id="featuredAuthor"></div>
+            </aside>
           </div>
+
+          <section class="panel add-context-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow" data-i18n="extractEyebrow">Add Context</p>
+                <h3 data-i18n="extractTitle">Paste a public post to see what is missing</h3>
+              </div>
+              <span class="source-pill" data-i18n="offlineLabel">Offline-safe demo</span>
+            </div>
+            <div class="add-context-grid">
+              <textarea id="manualPost" placeholder="Paste a market call here...">TSLA 要起飞了，聪明钱已经进场，别等错过才后悔。</textarea>
+              <div>
+                <button class="secondary-btn full" id="analyzeManual" data-i18n="analyzeManual">Analyze pasted post</button>
+                <p class="analysis-status" id="analysisStatus" aria-live="polite"></p>
+              </div>
+            </div>
+          </section>
         </section>
 
         <section class="view" id="view-receipt">

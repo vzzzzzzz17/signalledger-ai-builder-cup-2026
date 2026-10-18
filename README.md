@@ -1,8 +1,8 @@
 # SignalLedger
 
-SignalLedger is a trading-community intelligence layer for social market calls.
+SignalLedger is a KOL-first intelligence layer for trading communities.
 
-Users can still browse market opinions from stock and crypto communities, while SignalLedger adds professional context beside each actionable call:
+Users follow the authors shaping the conversation, while SignalLedger adds professional context beside each actionable call:
 
 - what the author actually claimed;
 - whether risk was disclosed;
@@ -23,13 +23,14 @@ Live demo: https://signalledger-ai-builder-cup.web.app
 demo/index.html
 ```
 
-Open it directly in a browser, then click **Open community feed**.
+Open it directly in a browser. The Discover feed loads automatically.
 
 The demo includes:
 
 - English / Chinese language toggle.
-- US stock and crypto sample calls.
-- Community feed view.
+- Three author profiles spanning US stocks and crypto.
+- KOL-first Discover feed with market filters and author search.
+- Community post view.
 - Context card for each market call.
 - Follower execution gap analysis.
 - Author behavior profile.

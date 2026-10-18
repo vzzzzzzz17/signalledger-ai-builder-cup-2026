@@ -6,9 +6,9 @@
 
 ## 0:20-0:45 | Enter the community
 
-Open `demo/index.html`, switch to Chinese if useful, and click **Open community feed**.
+Open `demo/index.html`, switch to Chinese if useful, and let the Discover feed load automatically.
 
-“This is intentionally a community-style workflow. We can browse X-style posts, broker-community posts, crypto calls, and chat snippets in one place. The prototype uses synthetic public-style content.”
+“This is intentionally a KOL-first workflow. We can browse the authors shaping X-style posts, broker-community posts, crypto calls, and chat snippets in one place. The prototype uses synthetic public-style content.”
 
 ## 0:45-1:20 | Open context
 
