@@ -2,7 +2,8 @@
 
 ## Ready
 
-- [x] Working deployed prototype: https://signalledger-ai-builder-cup.web.app
+- [x] Working deployed prototype on Cloud Run: https://signalledger-api-991291718418.us-central1.run.app
+- [x] Firebase product mirror: https://signalledger-ai-builder-cup.web.app
 - [x] Cloud Run API deployed behind Firebase Hosting `/api/**`
 - [x] Public GitHub repository: https://github.com/vzzzzzzz17/signalledger-ai-builder-cup-2026
 - [x] KOL-first Discover feed with automatic loading
@@ -26,7 +27,7 @@
 
 ## Technical Note
 
-The deployed Cloud Run service uses `ENABLE_LIVE_AI=true`. A real test through Firebase Hosting and a direct Cloud Run request both returned `live: true` with `model: gemini-2.5-flash`. The homepage does not call the model automatically; Gemini is invoked only when the user submits text through the Analyze action. The deterministic offline path remains available when `ENABLE_LIVE_AI=false`.
+The deployed Cloud Run service uses `ENABLE_LIVE_AI=true`. Its root path serves the complete prototype, and a real test through both the Cloud Run URL and Firebase Hosting returned `live: true` with `model: gemini-2.5-flash`. The homepage does not call the model automatically; Gemini is invoked only when the user submits text through the Analyze action. The deterministic offline path remains available when `ENABLE_LIVE_AI=false`.
 
 ## Submission Copy
 

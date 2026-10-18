@@ -47,7 +47,7 @@ The prototype uses source-linked public commentary, clearly labeled scenario con
 ## Google Cloud Architecture
 
 - Frontend: Firebase Hosting.
-- AI extraction API: Cloud Run.
+- Frontend + AI extraction API: Cloud Run (`https://signalledger-api-991291718418.us-central1.run.app`).
 - Model: Gemini / Vertex AI Gemini.
 - Storage: Cloud Storage for uploaded screenshots.
 - Database: Firestore for posts, context receipts, author profiles, and appeal records.
@@ -81,11 +81,11 @@ cp .firebaserc.example .firebaserc
 firebase deploy --only hosting --config firebase.static.json
 ```
 
-Deploy the API separately to Cloud Run, then Firebase's rewrite will expose it at `/api/analyze`:
+Deploy the complete app to Cloud Run; the same service serves the frontend at `/` and the Gemini API at `/api/analyze`. Firebase's rewrite also exposes the API through the Firebase product mirror:
 
 ```bash
 gcloud run deploy signalledger-api \
-  --source server \
+  --source . \
   --region us-central1 \
   --allow-unauthenticated \
   --min 0 \

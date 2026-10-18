@@ -49,7 +49,8 @@ Use this sheet while completing the competition form. The canonical team names a
 
 ## 9. Demo Links
 
-- **Live product:** https://signalledger-ai-builder-cup.web.app
+- **Cloud Run prototype:** https://signalledger-api-991291718418.us-central1.run.app
+- **Firebase product mirror:** https://signalledger-ai-builder-cup.web.app
 - **Video player:** https://signalledger-ai-builder-cup.web.app/demo-video.html?v=final
 - **Direct video file:** https://signalledger-ai-builder-cup.web.app/SignalLedger-Demo-Video-Zhangwei-Chen-Jiaoyi.mp4
 - **GitHub repository:** https://github.com/vzzzzzzz17/signalledger-ai-builder-cup-2026
@@ -86,7 +87,7 @@ Use these statements when the form asks about data, privacy, or financial advice
 - [ ] Enter `Chen Jiaoyi` exactly as the team member name.
 - [ ] Paste the one-line pitch and solution description above.
 - [ ] Select or enter the BFSI theme/category.
-- [ ] Prototype Link: paste `https://signalledger-ai-builder-cup.web.app`.
+- [ ] Prototype Link: paste `https://signalledger-api-991291718418.us-central1.run.app`.
 - [ ] Upload `SignalLedger-Official-Submission-Template.pdf`.
 - [ ] Paste the GitHub repository URL.
 - [ ] Demo Video Link: paste `https://signalledger-ai-builder-cup.web.app/demo-video.html?v=final`.

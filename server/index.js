@@ -1,4 +1,7 @@
 import http from "node:http";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { GoogleAuth } from "google-auth-library";
 import { XMLParser } from "fast-xml-parser";
 
@@ -7,6 +10,7 @@ const projectId = process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT
 const location = process.env.VERTEX_LOCATION || "us-central1";
 const model = process.env.VERTEX_MODEL || "gemini-2.5-flash";
 const liveAiEnabled = process.env.ENABLE_LIVE_AI === "true";
+const demoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "demo");
 const stockSymbols = ["NVDA", "TSLA", "PLTR", "COIN", "MSTR", "AAPL", "MSFT", "AMD", "JPM", "SPY"];
 let marketCache = { expiresAt: 0, payload: null };
 let publicAuthorCache = { expiresAt: 0, payload: null };
@@ -51,6 +55,30 @@ const headers = {
 function send(res, status, body) {
   res.writeHead(status, headers);
   res.end(JSON.stringify(body));
+}
+
+function serveDemo(req, res) {
+  const requested = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`).pathname;
+  const relative = requested === "/" ? "index.html" : requested.slice(1);
+  const filePath = path.resolve(demoRoot, relative);
+  if (!filePath.startsWith(`${demoRoot}${path.sep}`)) return send(res, 403, { error: "Forbidden" });
+
+  fs.stat(filePath, (error, stat) => {
+    if (error || !stat.isFile()) return send(res, 404, { error: "Not found" });
+    const contentTypes = {
+      ".css": "text/css; charset=utf-8",
+      ".html": "text/html; charset=utf-8",
+      ".js": "text/javascript; charset=utf-8",
+      ".json": "application/json; charset=utf-8",
+      ".mp4": "video/mp4",
+      ".svg": "image/svg+xml",
+    };
+    res.writeHead(200, {
+      "Cache-Control": "no-cache",
+      "Content-Type": contentTypes[path.extname(filePath)] || "application/octet-stream",
+    });
+    fs.createReadStream(filePath).pipe(res);
+  });
 }
 
 async function fetchJson(url, timeoutMs = 3500) {
@@ -267,6 +295,7 @@ const server = http.createServer(async (req, res) => {
       return send(res, 502, { ok: false, error: "Market snapshot unavailable" });
     }
   }
+  if (req.method === "GET" && !req.url.startsWith("/api/")) return serveDemo(req, res);
   if (req.method !== "POST" || req.url !== "/api/analyze") return send(res, 404, { error: "Not found" });
 
   try {
