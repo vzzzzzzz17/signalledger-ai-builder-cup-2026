@@ -28,17 +28,21 @@ Already created:
 - Prototype plan: `prototype-plan.md`.
 - Demo specification: `demo-spec.md`.
 - Chinese discussion notes: `discussion-notes-zh.md`.
+- Public demo: https://signalledger-ai-builder-cup.web.app
 - Static clickable demo: `demo/index.html`.
 - Bilingual UI: English / Chinese.
 - Sample dataset: 15 market calls across US stocks and crypto.
 - Core feature: follower execution gap.
 - KOL appeal / add-context flow.
+- Public RSS author feeds with source links.
+- Public delayed market snapshots from Nasdaq and CoinGecko.
+- Formal deck: `SignalLedger-Solution-Deck.pptx`.
 
 ## What Is Missing
 
 ### 1. Real Google AI Integration
 
-Current demo uses static sample data. For submission, we should add a small backend endpoint that calls Gemini to:
+The deployed demo has a Cloud Run backend with a Gemini/Vertex AI path, gated off by default to keep the public prototype within zero-model-cost mode. The endpoint can:
 
 - Extract asset, direction, horizon, evidence, risk disclosure, and promotional pressure from pasted text.
 - Optionally analyze uploaded screenshots.
@@ -64,7 +68,7 @@ Recommended:
 
 - Firebase Hosting for frontend.
 - Cloud Run for Gemini extraction API.
-- Firestore optional; for hackathon demo, static JSON is enough.
+- Firestore optional; for hackathon demo, cached public feeds and static JSON are enough.
 
 ### 3. Public GitHub Repository
 
@@ -84,11 +88,11 @@ Need a script and screen recording under 3 minutes.
 Suggested structure:
 
 - 0:00-0:20: Problem.
-- 0:20-0:50: Load community posts.
-- 0:50-1:25: Gemini extraction.
+- 0:20-0:50: Browse source-linked public authors.
+- 0:50-1:25: Open a scenario author's context card.
 - 1:25-2:05: Context card.
 - 2:05-2:40: Follower execution gap.
-- 2:40-3:00: Author profile and platform review.
+- 2:40-3:00: Author profile, source link, and fairness flow.
 
 ### 5. Solution Deck
 
@@ -109,11 +113,8 @@ Recommended deck:
 
 Required:
 
-1. Google Cloud project ID.
-2. Whether you want to use Vertex AI Gemini or Gemini API key.
-3. Whether you already have a public GitHub repo, or want me to prepare the repo locally first.
-4. Team name and member names for deck/video.
-5. Preferred submission language: English only, or bilingual deck with English primary.
+1. Team name and member names for deck/video.
+2. Preferred submission language: English only, or bilingual deck with English primary.
 
 Strongly recommended:
 
@@ -134,21 +135,19 @@ Avoid providing:
 
 ### Phase 1: Upgrade Prototype Into Submission App
 
-- Move static demo into a small web app structure.
-- Add clean README.
-- Add sample dataset as JSON.
-- Add Gemini extraction prompt and API route.
+- KOL-first web app and public demo are complete.
+- README, source-linked feeds, and API route are complete.
+- Gemini extraction prompt and API route are complete; live calls remain opt-in.
 
 ### Phase 2: Google Cloud Deployment
 
-- Deploy frontend.
-- Deploy Gemini API backend.
-- Produce deployed URL.
+- Firebase Hosting and Cloud Run are deployed.
+- Produce final video and submit the live URL.
 
 ### Phase 3: Submission Assets
 
-- Create deck.
-- Create 3-minute video script.
+- Upload `SignalLedger-Solution-Deck.pptx`.
+- Record the 3-minute video from `demo-video-script.md`.
 - Create README and architecture diagram.
 - Final compliance pass.
 

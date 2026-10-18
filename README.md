@@ -28,7 +28,7 @@ Open it directly in a browser. The Discover feed loads automatically.
 The demo includes:
 
 - English / Chinese language toggle.
-- Three author profiles spanning US stocks and crypto.
+- Source-linked public author feeds plus three scenario author profiles.
 - KOL-first Discover feed with market filters and author search.
 - Community post view.
 - Context card for each market call.
@@ -42,9 +42,9 @@ The demo includes:
 
 SignalLedger does not provide trading advice, price predictions, or personalized investment recommendations.
 
-The prototype uses synthetic public-style content and static market paths. It does not use employer-private data, internal screenshots, private moderation rules, or non-public user metrics.
+The prototype uses source-linked public commentary, clearly labeled scenario content, and delayed public market snapshots. It does not use employer-private data, internal screenshots, private moderation rules, or non-public user metrics.
 
-## Planned Google Cloud Architecture
+## Google Cloud Architecture
 
 - Frontend: Firebase Hosting.
 - AI extraction API: Cloud Run.
@@ -111,11 +111,14 @@ discussion-notes-zh.md
 submission-plan.md
 solution-deck.md
 demo-video-script.md
+SignalLedger-Solution-Deck.pptx
+submission-checklist.md
+recording-runbook.md
 ```
 
-## Next Steps
+## Submission Assets
 
-1. Connect the deployed Cloud Run service to Vertex AI Gemini.
-2. Deploy Firebase Hosting and Cloud Run.
-3. Prepare public demo video under 3 minutes.
-4. Prepare submission deck.
+1. `SignalLedger-Solution-Deck.pptx`
+2. `demo-video-script.md`
+3. `recording-runbook.md`
+4. `submission-checklist.md`
