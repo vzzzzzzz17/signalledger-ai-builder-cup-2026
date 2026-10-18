@@ -63,6 +63,7 @@
               <button class="filter-btn active" data-market="all" data-i18n="filterAll">All authors</button>
               <button class="filter-btn" data-market="US Stock" data-i18n="filterStocks">US equities</button>
               <button class="filter-btn" data-market="Crypto" data-i18n="filterCrypto">Crypto</button>
+              <button class="filter-btn" data-market="Macro" data-i18n="filterMacro">Macro & portfolios</button>
               <button class="filter-btn" data-market="needs-context" data-i18n="filterNeedsContext">Needs context</button>
             </div>
             <label class="search-field">
@@ -78,7 +79,7 @@
                   <p class="eyebrow" data-i18n="inputEyebrow">Community Feed</p>
                   <h3 data-i18n="inputTitle">Authors worth watching today</h3>
                 </div>
-                <span class="live-label"><i></i><span id="marketSnapshotStatus" data-i18n="snapshotLabel">Loading public market snapshot</span></span>
+                <span class="data-status-group"><span class="live-label"><i></i><span id="authorDataStatus" data-i18n="authorDataLoading">Loading public authors</span></span><span class="source-pill" id="marketSnapshotStatus" data-i18n="snapshotLabel">Loading public market snapshot</span></span>
               </div>
               <div id="authorList" class="author-list"></div>
               <div id="authorEmpty" class="empty-state" hidden>

@@ -1,5 +1,6 @@
 import http from "node:http";
 import { GoogleAuth } from "google-auth-library";
+import { XMLParser } from "fast-xml-parser";
 
 const port = Number(process.env.PORT || 8080);
 const projectId = process.env.GOOGLE_CLOUD_PROJECT || process.env.GCLOUD_PROJECT;
@@ -8,6 +9,37 @@ const model = process.env.VERTEX_MODEL || "gemini-2.5-flash";
 const liveAiEnabled = process.env.ENABLE_LIVE_AI === "true";
 const stockSymbols = ["NVDA", "TSLA", "PLTR", "COIN", "MSTR", "AAPL", "MSFT", "AMD", "JPM", "SPY"];
 let marketCache = { expiresAt: 0, payload: null };
+let publicAuthorCache = { expiresAt: 0, payload: null };
+const publicFeeds = [
+  {
+    author: "Barry Ritholtz",
+    feedUrl: "https://ritholtz.com/feed/",
+    profileUrl: "https://ritholtz.com/",
+    profileDescription: "The Big Picture · public market commentary",
+    market: "Macro",
+  },
+  {
+    author: "Ben Carlson",
+    feedUrl: "https://awealthofcommonsense.com/feed/",
+    profileUrl: "https://awealthofcommonsense.com/",
+    profileDescription: "A Wealth of Common Sense · portfolio commentary",
+    market: "Macro",
+  },
+  {
+    author: "Nick Maggiulli",
+    feedUrl: "https://ofdollarsanddata.com/feed/",
+    profileUrl: "https://ofdollarsanddata.com/",
+    profileDescription: "Of Dollars And Data · evidence-led investing",
+    market: "Macro",
+  },
+  {
+    author: "Lyn Alden",
+    feedUrl: "https://www.lynalden.com/feed/",
+    profileUrl: "https://www.lynalden.com/",
+    profileDescription: "Lyn Alden · macro and digital assets",
+    market: "Crypto",
+  },
+];
 
 const headers = {
   "Access-Control-Allow-Origin": process.env.ALLOWED_ORIGIN || "*",
@@ -28,6 +60,18 @@ async function fetchJson(url, timeoutMs = 3500) {
     const response = await fetch(url, { signal: controller.signal, headers: { "User-Agent": "SignalLedger/1.0" } });
     if (!response.ok) throw new Error(`Upstream returned ${response.status}`);
     return response.json();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function fetchText(url, timeoutMs = 4500) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, { signal: controller.signal, headers: { "User-Agent": "SignalLedger/1.0 (public RSS reader)" } });
+    if (!response.ok) throw new Error(`Upstream returned ${response.status}`);
+    return response.text();
   } finally {
     clearTimeout(timer);
   }
@@ -80,6 +124,65 @@ async function marketSnapshot() {
   }
   const payload = { ok: true, asOf: new Date().toISOString(), quotes, source: "Public delayed market snapshots" };
   marketCache = { payload, expiresAt: Date.now() + 5 * 60 * 1000 };
+  return payload;
+}
+
+function asArray(value) {
+  return Array.isArray(value) ? value : value ? [value] : [];
+}
+
+async function fetchPublicAuthorFeed(feed) {
+  const xml = await fetchText(feed.feedUrl);
+  const parser = new XMLParser({ ignoreAttributes: false, removeNSPrefix: true, processEntities: true });
+  const parsed = parser.parse(xml);
+  const items = asArray(parsed.rss?.channel?.item || parsed.feed?.entry).slice(0, 3);
+  return items.map((item, index) => {
+    const link = typeof item.link === "string" ? item.link : item.link?.["@_href"] || feed.profileUrl;
+    const published = item.pubDate || item.published || item.updated || new Date().toISOString();
+    const title = String(item.title || "Public market commentary")
+      .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
+      .replace(/&#x([\da-fA-F]+);/g, (_, code) => String.fromCodePoint(parseInt(code, 16)))
+      .replace(/&amp;/g, "&");
+    return {
+      id: `PUB-${feed.author.replace(/\W/g, "").slice(0, 8)}-${index + 1}`,
+      author: feed.author,
+      source: "Public RSS",
+      sourceUrl: link,
+      profileUrl: feed.profileUrl,
+      profileDescription: feed.profileDescription,
+      provenance: "Public RSS article",
+      asset: feed.market === "Crypto" ? "BTC" : "Macro",
+      market: feed.market,
+      time: published,
+      price: null,
+      direction: "Commentary",
+      action: "Read context",
+      horizon: "Not specified",
+      text: title,
+      risk: 72,
+      hype: 12,
+      evidence: "Published article or podcast title",
+      stopLoss: "Not a direct trade call",
+      notes: ["Public source linked", "Not a direct trade call", "Full context remains at source"],
+      returns: { one: 0, seven: 0, thirty: 0, maxFav: 0, maxAdv: 0, follower: 0 },
+      path: [0, 0, 0, 0, 0, 0, 0, 0],
+      flags: ["Public article", "No direct entry or exit"],
+    };
+  });
+}
+
+async function publicAuthorSnapshot() {
+  if (publicAuthorCache.payload && publicAuthorCache.expiresAt > Date.now()) return publicAuthorCache.payload;
+  const results = await Promise.all(publicFeeds.map(async (feed) => {
+    try {
+      return await fetchPublicAuthorFeed(feed);
+    } catch {
+      return [];
+    }
+  }));
+  const calls = results.flat();
+  const payload = { ok: true, asOf: new Date().toISOString(), calls, source: "Public RSS feeds", feedCount: publicFeeds.length };
+  publicAuthorCache = { payload, expiresAt: Date.now() + 15 * 60 * 1000 };
   return payload;
 }
 
@@ -148,6 +251,14 @@ function offlineAnalysis(text) {
 const server = http.createServer(async (req, res) => {
   if (req.method === "OPTIONS") return send(res, 204, {});
   if (req.method === "GET" && req.url === "/health") return send(res, 200, { ok: true, service: "signalledger-api" });
+  if (req.method === "GET" && req.url === "/api/public-authors") {
+    try {
+      return send(res, 200, await publicAuthorSnapshot());
+    } catch (error) {
+      console.error(error);
+      return send(res, 502, { ok: false, error: "Public author feeds unavailable" });
+    }
+  }
   if (req.method === "GET" && req.url === "/api/market-snapshot") {
     try {
       return send(res, 200, await marketSnapshot());

@@ -336,6 +336,7 @@ let selectedId = null;
 let selectedAuthor = "ChartSage";
 let marketFilter = "all";
 let marketQuotes = {};
+let publicCalls = [];
 let appealCount = 0;
 let lang = "en";
 
@@ -370,11 +371,16 @@ const i18n = {
     filterAll: "All authors",
     filterStocks: "US equities",
     filterCrypto: "Crypto",
+    filterMacro: "Macro & portfolios",
     filterNeedsContext: "Needs context",
     searchAuthors: "Search authors or assets",
     snapshotLabel: "Loading public market snapshot",
     snapshotLive: "Delayed public market snapshot",
     snapshotFallback: "Cached demo snapshot",
+    authorDataLoading: "Loading public authors",
+    authorDataLive: "Public authors · source-linked",
+    authorDataFallback: "Scenario authors · offline",
+    publicSource: "Public source",
     featuredEyebrow: "Selected Author",
     featuredTitle: "Professional context at a glance",
     offlineLabel: "Offline-safe demo",
@@ -446,6 +452,7 @@ const i18n = {
     noReceipt: "No receipt selected",
     loadToInspect: "Open the community feed to inspect a context card.",
     loadToCompare: "Load sample data to compare KOL narrative and follower reality.",
+    articleNoScenario: "This is a public article, not a direct trade call. SignalLedger does not invent an entry or follower outcome.",
     langToggle: "中文",
   },
   zh: {
@@ -478,11 +485,16 @@ const i18n = {
     filterAll: "全部作者",
     filterStocks: "美股",
     filterCrypto: "Crypto",
+    filterMacro: "宏观与组合",
     filterNeedsContext: "需要上下文",
     searchAuthors: "搜索作者或标的",
     snapshotLabel: "正在加载公开行情快照",
     snapshotLive: "公开延迟行情快照",
     snapshotFallback: "缓存演示快照",
+    authorDataLoading: "正在加载公开作者",
+    authorDataLive: "公开作者 · 有来源链接",
+    authorDataFallback: "情景作者 · 离线模式",
+    publicSource: "公开来源",
     featuredEyebrow: "当前作者",
     featuredTitle: "一眼看懂专业上下文",
     offlineLabel: "离线安全演示",
@@ -553,6 +565,7 @@ const i18n = {
     noReceipt: "尚未选择收据",
     loadToInspect: "打开社区信息流后，可查看上下文卡片。",
     loadToCompare: "加载样例数据后，可比较 KOL 叙事和粉丝真实路径。",
+    articleNoScenario: "这是一篇公开文章，不是直接喊单。SignalLedger 不会自行编造入场价或粉丝结果。",
     langToggle: "EN",
   },
 };
@@ -581,9 +594,21 @@ function fmtPct(value) {
 }
 
 function fmtPrice(call) {
+  if (call.price == null) return "Not applicable";
   if (call.asset === "PEPE") return `$${call.price.toFixed(6)}`;
   if (call.asset === "DOGE") return `$${call.price.toFixed(2)}`;
   return `$${call.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+}
+
+function fmtDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value).split(" ")[0];
+  return date.toLocaleDateString(lang === "zh" ? "zh-CN" : "en-US", { month: "short", day: "numeric" });
+}
+
+function sourceLink(call, label = lang === "zh" ? "打开原文" : "Open source") {
+  if (!call.sourceUrl) return "";
+  return `<a class="source-link" href="${escapeHtml(call.sourceUrl)}" target="_blank" rel="noreferrer">${label} ↗</a>`;
 }
 
 function fmtLivePrice(quote) {
@@ -673,6 +698,9 @@ function renderAuthorFeed() {
   const authors = Object.entries(groupedByAuthor())
     .filter(([author, authorCalls]) => authorMatches(author, authorCalls, search))
     .sort(([, firstCalls], [, secondCalls]) => {
+      const firstPublic = firstCalls.some((call) => call.provenance) ? 1 : 0;
+      const secondPublic = secondCalls.some((call) => call.provenance) ? 1 : 0;
+      if (firstPublic !== secondPublic) return secondPublic - firstPublic;
       const firstGap = authorMetrics(firstCalls).gap;
       const secondGap = authorMetrics(secondCalls).gap;
       return secondGap - firstGap;
@@ -681,9 +709,13 @@ function renderAuthorFeed() {
   empty.hidden = authors.length > 0;
   list.innerHTML = authors
     .map(([author, authorCalls]) => {
-      const profile = kolProfiles[author] || { description: "Imported public author", grade: "B" };
+      const publicProfile = authorCalls.find((call) => call.profileDescription);
+      const profile = kolProfiles[author] || { description: publicProfile?.profileDescription || "Imported public author", grade: null };
       const metrics = authorMetrics(authorCalls);
       const latest = authorCalls[authorCalls.length - 1];
+      const gradeMarkup = profile.grade
+        ? `<span class="grade-pill ${gradeClass(profile.grade)}">${t("authorGrade")} ${profile.grade}</span>`
+        : `<span class="source-pill">${t("publicSource")}</span>`;
       return `
         <article class="author-card ${author === selectedAuthor ? "selected" : ""}">
           <div class="author-card-head">
@@ -691,12 +723,12 @@ function renderAuthorFeed() {
               <span class="author-avatar">${authorInitials(author)}</span>
               <span><strong>${escapeHtml(author)}</strong><small>${escapeHtml(profile.description)}</small></span>
             </button>
-            <span class="grade-pill ${gradeClass(profile.grade)}">${t("authorGrade")} ${profile.grade}</span>
+            ${gradeMarkup}
           </div>
           <div class="author-signal">
-            <div class="post-top"><span class="eyebrow">${escapeHtml(latest.asset)} · ${escapeHtml(latest.source)}</span><span class="quote-group">${liveQuoteTag(latest)}<span class="source-pill">${escapeHtml(latest.time.split(" ")[0])}</span></span></div>
+            <div class="post-top"><span class="eyebrow">${escapeHtml(latest.asset)} · ${escapeHtml(latest.source)}</span><span class="quote-group">${liveQuoteTag(latest)}<span class="source-pill">${fmtDate(latest.time)}</span></span></div>
             <p>${escapeHtml(latest.text)}</p>
-            <div class="post-tags"><span class="tag">${authorCalls.length} ${t("calls")}</span>${riskTag(latest)}<span class="tag ${metrics.gap > 10 ? "amber" : "green"}">${t("slippageGap")} ${fmtPct(metrics.gap)}</span></div>
+            <div class="post-tags"><span class="tag">${authorCalls.length} ${t("calls")}</span>${riskTag(latest)}<span class="tag ${metrics.gap > 10 ? "amber" : "green"}">${t("slippageGap")} ${fmtPct(metrics.gap)}</span>${sourceLink(latest)}</div>
           </div>
           <div class="author-card-footer">
             <span class="author-stat"><b>${metrics.risk}</b><small>${t("riskDisclosure")}</small></span>
@@ -735,12 +767,17 @@ function renderFeaturedAuthor() {
     container.innerHTML = `<div class="empty-state">${t("emptyState")}</div>`;
     return;
   }
-  const profile = kolProfiles[selectedAuthor] || { description: "Imported public author", grade: "B" };
+  const publicProfile = authorCalls.find((call) => call.profileDescription);
+  const profile = kolProfiles[selectedAuthor] || { description: publicProfile?.profileDescription || "Imported public author", grade: null };
   const metrics = authorMetrics(authorCalls);
+  const gradeMarkup = profile.grade
+    ? `<span class="grade-pill ${gradeClass(profile.grade)}">${t("authorGrade")} ${profile.grade}</span>`
+    : `<span class="source-pill">${t("publicSource")}</span>`;
   container.innerHTML = `
-    <div class="featured-identity"><span class="author-avatar large">${authorInitials(selectedAuthor)}</span><div><h4>${escapeHtml(selectedAuthor)}</h4><p>${escapeHtml(profile.description)}</p></div><span class="grade-pill ${gradeClass(profile.grade)}">${profile.grade}</span></div>
+    <div class="featured-identity"><span class="author-avatar large">${authorInitials(selectedAuthor)}</span><div><h4>${escapeHtml(selectedAuthor)}</h4><p>${escapeHtml(profile.description)}</p></div>${gradeMarkup}</div>
     <div class="featured-metrics"><div><strong>${metrics.risk}</strong><span>${t("riskDisclosure")}</span></div><div><strong>${metrics.gap}%</strong><span>${t("slippageGap")}</span></div></div>
-    <div class="featured-call-list"><p class="eyebrow">${t("latestSignals")}</p>${authorCalls.slice(-3).reverse().map((call) => `<button class="featured-call open-call" data-call-id="${call.id}"><span><b>${escapeHtml(call.asset)}</b><small>${escapeHtml(call.text)}</small></span><span class="tag ${call.risk >= 75 ? "green" : "amber"}">${call.risk}</span></button>`).join("")}</div>
+    <div class="featured-call-list"><p class="eyebrow">${t("latestSignals")}</p>${authorCalls.slice(-3).reverse().map((call) => `<button class="featured-call open-call" data-call-id="${call.id}"><span><b>${escapeHtml(call.asset)} · ${fmtDate(call.time)}</b><small>${escapeHtml(call.text)}</small></span><span class="tag ${call.risk >= 75 ? "green" : "amber"}">${call.risk}</span></button>`).join("")}</div>
+    ${sourceLink(authorCalls[authorCalls.length - 1])}
     <button class="secondary-btn full open-appeal" data-author="${escapeHtml(selectedAuthor)}">${t("appealButton")}</button>
   `;
   $$("#featuredAuthor .open-call").forEach((button) => button.addEventListener("click", () => {
@@ -779,6 +816,7 @@ function renderReceipt() {
     <div class="meta-box"><label>${lang === "zh" ? "市场" : "Market"}</label><span>${call.market}</span></div>
     <div class="meta-box"><label>${lang === "zh" ? "动作" : "Action"}</label><span>${call.action}</span></div>
     ${liveQuote?.price ? `<div class="meta-box"><label>${lang === "zh" ? "公开行情快照" : "Public snapshot"}</label><span>${fmtLivePrice(liveQuote)} ${liveQuote.changePct == null ? "" : fmtPct(Number(liveQuote.changePct))}</span></div>` : ""}
+    ${call.sourceUrl ? `<div class="meta-box"><label>${lang === "zh" ? "来源" : "Source"}</label>${sourceLink(call)}</div>` : ""}
   `;
   $("#receiptId").textContent = call.id;
   $("#receiptAsset").textContent = `${call.asset} · ${call.market}`;
@@ -849,6 +887,16 @@ function renderOutcome() {
     $("#slippageCallout").textContent = t("loadToCompare");
     return;
   }
+  if (call.provenance) {
+    $("#outcomeTitle").textContent = `${call.author} · ${call.asset}`;
+    $("#priceChart").innerHTML = `<text x="48" y="130" fill="#697386" font-size="14">${escapeHtml(t("articleNoScenario"))}</text>`;
+    $("#outcomeMetrics").innerHTML = `
+      <div class="metric-box"><label>${t("kolVisible")}</label><strong>n/a</strong></div>
+      <div class="metric-box"><label>${t("delayedFollower")}</label><strong>n/a</strong></div>
+    `;
+    $("#slippageCallout").textContent = t("articleNoScenario");
+    return;
+  }
   renderChart(call);
   const visible = call.returns.maxFav;
   const gap = visible - call.returns.follower;
@@ -892,7 +940,8 @@ function renderKolDashboard() {
   const groups = groupedByAuthor();
   $("#kolDashboard").innerHTML = Object.entries(groups)
     .map(([author, authorCalls]) => {
-      const profile = kolProfiles[author] || { description: "Imported author", grade: "B" };
+      const publicProfile = authorCalls.find((call) => call.profileDescription);
+      const profile = kolProfiles[author] || { description: publicProfile?.profileDescription || "Imported author", grade: null };
       const risk = Math.round(average(authorCalls, (call) => call.risk));
       const hype = Math.round(average(authorCalls, (call) => call.hype));
       const gap = Math.round(average(authorCalls, (call) => call.returns.maxFav - call.returns.follower));
@@ -904,7 +953,7 @@ function renderKolDashboard() {
               <h4>${author}</h4>
               <p>${profile.description}</p>
             </div>
-            <span class="grade-pill ${gradeClass(profile.grade)}">${t("authorGrade")} ${profile.grade}</span>
+            ${profile.grade ? `<span class="grade-pill ${gradeClass(profile.grade)}">${t("authorGrade")} ${profile.grade}</span>` : `<span class="source-pill">${t("publicSource")}</span>`}
           </div>
           <div class="score-bars">
             ${scoreRow(t("riskDisclosure"), risk, "risk")}
@@ -990,6 +1039,7 @@ function showView(view) {
 
 function loadDataset() {
   calls = sampleCalls.map((call) => ({ ...call }));
+  publicCalls = [];
   selectedId = "SL-3001";
   selectedAuthor = "CryptoWhale";
   marketFilter = "all";
@@ -997,6 +1047,7 @@ function loadDataset() {
   renderAll();
   showView("inbox");
   loadMarketSnapshot();
+  loadPublicAuthors();
 }
 
 async function loadMarketSnapshot() {
@@ -1011,6 +1062,26 @@ async function loadMarketSnapshot() {
     renderAll();
   } catch {
     if (status) status.textContent = t("snapshotFallback");
+  }
+}
+
+async function loadPublicAuthors() {
+  const status = $("#authorDataStatus");
+  if (status) status.textContent = t("authorDataLoading");
+  try {
+    const response = await fetch("/api/public-authors");
+    if (!response.ok) throw new Error("Public author feeds unavailable");
+    const payload = await response.json();
+    publicCalls = Array.isArray(payload.calls) ? payload.calls : [];
+    calls = [...sampleCalls.map((call) => ({ ...call })), ...publicCalls];
+    if (publicCalls.length && !publicCalls.some((call) => call.author === selectedAuthor)) {
+      selectedAuthor = publicCalls[0].author;
+      selectedId = publicCalls[0].id;
+    }
+    if (status) status.textContent = publicCalls.length ? t("authorDataLive") : t("authorDataFallback");
+    renderAll();
+  } catch {
+    if (status) status.textContent = t("authorDataFallback");
   }
 }
 

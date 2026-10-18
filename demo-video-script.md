@@ -8,7 +8,7 @@
 
 Open `demo/index.html`, switch to Chinese if useful, and let the Discover feed load automatically.
 
-“This is intentionally a KOL-first workflow. We can browse the authors shaping X-style posts, broker-community posts, crypto calls, and chat snippets in one place. The prototype uses synthetic public-style content.”
+“This is intentionally a KOL-first workflow. We can browse public authors and scenario authors in one place. Public RSS items keep their source links; scenario posts are clearly labeled and never presented as verified real calls.”
 
 ## 0:45-1:20 | Open context
 

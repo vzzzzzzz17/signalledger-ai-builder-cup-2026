@@ -9,6 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "fast-xml-parser": "^5.2.5",
     "google-auth-library": "^9.14.2"
   }
 }
