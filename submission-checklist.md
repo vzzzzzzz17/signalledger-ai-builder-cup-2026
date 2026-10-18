@@ -16,8 +16,8 @@
 
 ## Before Submit
 
-- [ ] Add team name and member names to the deck and submission form.
-- [ ] Replace `[ADD NAME]` on the Team Details slide.
+- [x] Add team name and member names to the deck.
+- [ ] Confirm the same names in the submission form.
 - [ ] Record a video under 3 minutes.
 - [ ] Upload the public Demo URL, GitHub URL, video, and PPTX.
 - [ ] Verify the GitHub repository is public in the browser.
